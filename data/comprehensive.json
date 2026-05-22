@@ -1,0 +1,57 @@
+{
+  "cross_analysis": {
+    "role_theme_correlation": [
+      {"archetype": "生", "dominant_themes": ["忠义冲突", "家国情怀", "智勇双全"], "correlation_strength": 0.72},
+      {"archetype": "旦", "dominant_themes": ["爱情悲剧", "儿女情长", "生离死别"], "correlation_strength": 0.78},
+      {"archetype": "净", "dominant_themes": ["忠义冲突", "权力斗争", "舍生取义"], "correlation_strength": 0.65},
+      {"archetype": "丑", "dominant_themes": ["讽刺批判", "官场腐败", "伦理教化"], "correlation_strength": 0.58}
+    ],
+
+    "network_narrative_correlation": [
+      {"play_id": "play_001", "play_title": "霸王别姬",
+       "network_density": 0.357, "sentiment_range": 1.4, "narrative_pattern": "悲剧递进型",
+       "key_finding": "高密度网络集中于前半场，随情感下行网络解体"},
+      {"play_id": "play_003", "play_title": "窦娥冤",
+       "network_density": 0.533, "sentiment_range": 1.2, "narrative_pattern": "冤案昭雪型",
+       "key_finding": "对立关系网在中间场次密度最高，昭雪后迅速稀疏"},
+      {"play_id": "play_005", "play_title": "铡美案",
+       "network_density": 0.467, "sentiment_range": 1.0, "narrative_pattern": "清官断案型",
+       "key_finding": "包拯介入后网络中心性急剧转移，从分散到集中"},
+      {"play_id": "play_006", "play_title": "牡丹亭",
+       "network_density": 0.467, "sentiment_range": 1.7, "narrative_pattern": "悲欢离合型",
+       "key_finding": "生死界限打破后网络结构重组，社区边界消融"}
+    ],
+
+    "triple_correlation_matrix": {
+      "description": "行当-主题-叙事模式三维关联矩阵",
+      "dimensions": {
+        "archetypes": ["生", "旦", "净", "丑"],
+        "theme_clusters": ["家国大义", "儿女情长", "社会批判"],
+        "narrative_patterns": ["悲剧递进型", "冤案昭雪型", "清官断案型", "悲欢离合型"]
+      },
+      "values": [
+        [0.75, 0.30, 0.45, 0.55],
+        [0.20, 0.85, 0.15, 0.60],
+        [0.35, 0.15, 0.72, 0.25],
+        [0.10, 0.25, 0.55, 0.30]
+      ]
+    }
+  },
+
+  "interaction_stories": [
+    {
+      "id": "story_1",
+      "title": "英雄末路：霸王别姬的悲剧织体",
+      "description": "选择霸王别姬，观察净角项羽与旦角虞姬的爱情线如何在忠义与权力主题中展开，最终走向递进式的悲剧叙事",
+      "play_id": "play_001",
+      "steps": ["查看行当分布，锁定净-旦组合", "观察网络图中项羽的高中介中心性", "追踪主题权重从权力斗争向爱情悲剧转移", "对比叙事弧线的持续下行趋势"]
+    },
+    {
+      "id": "story_2",
+      "title": "清官与反派：公案戏的结构共性",
+      "description": "对比窦娥冤和铡美案，发现公案戏中净角（清官）与丑角（反派）对立的典型结构",
+      "play_ids": ["play_003", "play_005"],
+      "steps": ["筛选公案戏类型", "对比网络图的二元对立社群结构", "观察官场腐败+因果报应的主题共现", "验证V型/波动上升的叙事模式"]
+    }
+  ]
+}

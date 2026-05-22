@@ -1,0 +1,90 @@
+{
+  "plays": {
+    "play_001": {
+      "play_title": "霸王别姬",
+      "play_type": "历史戏",
+      "total_scenes": 8,
+      "narrative_pattern": "悲剧递进型",
+      "scenes": [
+        {"scene_id": 1, "name": "第一场·出征", "sing_ratio": 0.25, "speak_ratio": 0.45, "action_ratio": 0.25, "fight_ratio": 0.05, "sentiment": 0.6, "tempo": "中"},
+        {"scene_id": 2, "name": "第二场·对阵", "sing_ratio": 0.15, "speak_ratio": 0.30, "action_ratio": 0.20, "fight_ratio": 0.35, "sentiment": 0.4, "tempo": "快"},
+        {"scene_id": 3, "name": "第三场·被困", "sing_ratio": 0.20, "speak_ratio": 0.50, "action_ratio": 0.20, "fight_ratio": 0.10, "sentiment": 0.1, "tempo": "慢"},
+        {"scene_id": 4, "name": "第四场·帐中", "sing_ratio": 0.45, "speak_ratio": 0.35, "action_ratio": 0.15, "fight_ratio": 0.05, "sentiment": -0.1, "tempo": "慢"},
+        {"scene_id": 5, "name": "第五场·舞剑", "sing_ratio": 0.35, "speak_ratio": 0.25, "action_ratio": 0.35, "fight_ratio": 0.05, "sentiment": -0.3, "tempo": "中"},
+        {"scene_id": 6, "name": "第六场·诀别", "sing_ratio": 0.55, "speak_ratio": 0.30, "action_ratio": 0.10, "fight_ratio": 0.05, "sentiment": -0.7, "tempo": "慢"},
+        {"scene_id": 7, "name": "第七场·突围", "sing_ratio": 0.10, "speak_ratio": 0.30, "action_ratio": 0.20, "fight_ratio": 0.40, "sentiment": -0.4, "tempo": "快"},
+        {"scene_id": 8, "name": "第八场·乌江", "sing_ratio": 0.40, "speak_ratio": 0.30, "action_ratio": 0.15, "fight_ratio": 0.15, "sentiment": -0.8, "tempo": "中"}
+      ],
+      "sentiment_arc": [0.6, 0.4, 0.1, -0.1, -0.3, -0.7, -0.4, -0.8],
+      "rhythm_profile": {"avg_sing": 0.306, "avg_speak": 0.344, "avg_action": 0.200, "avg_fight": 0.150}
+    },
+    "play_003": {
+      "play_title": "窦娥冤",
+      "play_type": "公案戏",
+      "total_scenes": 6,
+      "narrative_pattern": "冤案昭雪型",
+      "scenes": [
+        {"scene_id": 1, "name": "第一场·楔子", "sing_ratio": 0.20, "speak_ratio": 0.55, "action_ratio": 0.20, "fight_ratio": 0.05, "sentiment": 0.2, "tempo": "中"},
+        {"scene_id": 2, "name": "第二场·诬陷", "sing_ratio": 0.15, "speak_ratio": 0.50, "action_ratio": 0.30, "fight_ratio": 0.05, "sentiment": -0.2, "tempo": "快"},
+        {"scene_id": 3, "name": "第三场·拷打", "sing_ratio": 0.30, "speak_ratio": 0.40, "action_ratio": 0.25, "fight_ratio": 0.05, "sentiment": -0.6, "tempo": "快"},
+        {"scene_id": 4, "name": "第四场·蒙冤", "sing_ratio": 0.50, "speak_ratio": 0.35, "action_ratio": 0.10, "fight_ratio": 0.05, "sentiment": -0.8, "tempo": "慢"},
+        {"scene_id": 5, "name": "第五场·三愿", "sing_ratio": 0.60, "speak_ratio": 0.25, "action_ratio": 0.10, "fight_ratio": 0.05, "sentiment": -0.5, "tempo": "慢"},
+        {"scene_id": 6, "name": "第六场·昭雪", "sing_ratio": 0.25, "speak_ratio": 0.50, "action_ratio": 0.20, "fight_ratio": 0.05, "sentiment": 0.4, "tempo": "中"}
+      ],
+      "sentiment_arc": [0.2, -0.2, -0.6, -0.8, -0.5, 0.4],
+      "rhythm_profile": {"avg_sing": 0.333, "avg_speak": 0.425, "avg_action": 0.192, "avg_fight": 0.050}
+    },
+    "play_005": {
+      "play_title": "铡美案",
+      "play_type": "公案戏",
+      "total_scenes": 5,
+      "narrative_pattern": "清官断案型",
+      "scenes": [
+        {"scene_id": 1, "name": "第一场·投店", "sing_ratio": 0.30, "speak_ratio": 0.45, "action_ratio": 0.20, "fight_ratio": 0.05, "sentiment": 0.3, "tempo": "中"},
+        {"scene_id": 2, "name": "第二场·闯宫", "sing_ratio": 0.25, "speak_ratio": 0.40, "action_ratio": 0.25, "fight_ratio": 0.10, "sentiment": -0.1, "tempo": "快"},
+        {"scene_id": 3, "name": "第三场·告状", "sing_ratio": 0.40, "speak_ratio": 0.40, "action_ratio": 0.15, "fight_ratio": 0.05, "sentiment": -0.3, "tempo": "中"},
+        {"scene_id": 4, "name": "第四场·公堂", "sing_ratio": 0.20, "speak_ratio": 0.50, "action_ratio": 0.20, "fight_ratio": 0.10, "sentiment": 0.2, "tempo": "快"},
+        {"scene_id": 5, "name": "第五场·铡美", "sing_ratio": 0.15, "speak_ratio": 0.40, "action_ratio": 0.30, "fight_ratio": 0.15, "sentiment": 0.7, "tempo": "快"}
+      ],
+      "sentiment_arc": [0.3, -0.1, -0.3, 0.2, 0.7],
+      "rhythm_profile": {"avg_sing": 0.260, "avg_speak": 0.430, "avg_action": 0.220, "avg_fight": 0.090}
+    },
+    "play_006": {
+      "play_title": "牡丹亭",
+      "play_type": "家庭戏",
+      "total_scenes": 10,
+      "narrative_pattern": "悲欢离合型",
+      "scenes": [
+        {"scene_id": 1, "name": "第一场·训女", "sing_ratio": 0.25, "speak_ratio": 0.55, "action_ratio": 0.15, "fight_ratio": 0.05, "sentiment": 0.4, "tempo": "中"},
+        {"scene_id": 2, "name": "第二场·游园", "sing_ratio": 0.45, "speak_ratio": 0.30, "action_ratio": 0.20, "fight_ratio": 0.05, "sentiment": 0.7, "tempo": "慢"},
+        {"scene_id": 3, "name": "第三场·惊梦", "sing_ratio": 0.50, "speak_ratio": 0.20, "action_ratio": 0.25, "fight_ratio": 0.05, "sentiment": 0.8, "tempo": "慢"},
+        {"scene_id": 4, "name": "第四场·寻梦", "sing_ratio": 0.55, "speak_ratio": 0.25, "action_ratio": 0.15, "fight_ratio": 0.05, "sentiment": -0.1, "tempo": "慢"},
+        {"scene_id": 5, "name": "第五场·写真", "sing_ratio": 0.50, "speak_ratio": 0.30, "action_ratio": 0.15, "fight_ratio": 0.05, "sentiment": -0.4, "tempo": "慢"},
+        {"scene_id": 6, "name": "第六场·离魂", "sing_ratio": 0.60, "speak_ratio": 0.20, "action_ratio": 0.10, "fight_ratio": 0.10, "sentiment": -0.8, "tempo": "慢"},
+        {"scene_id": 7, "name": "第七场·拾画", "sing_ratio": 0.35, "speak_ratio": 0.40, "action_ratio": 0.20, "fight_ratio": 0.05, "sentiment": 0.2, "tempo": "中"},
+        {"scene_id": 8, "name": "第八场·幽媾", "sing_ratio": 0.45, "speak_ratio": 0.30, "action_ratio": 0.20, "fight_ratio": 0.05, "sentiment": 0.5, "tempo": "慢"},
+        {"scene_id": 9, "name": "第九场·冥判", "sing_ratio": 0.20, "speak_ratio": 0.45, "action_ratio": 0.25, "fight_ratio": 0.10, "sentiment": 0.3, "tempo": "快"},
+        {"scene_id": 10, "name": "第十场·团圆", "sing_ratio": 0.30, "speak_ratio": 0.40, "action_ratio": 0.20, "fight_ratio": 0.10, "sentiment": 0.9, "tempo": "中"}
+      ],
+      "sentiment_arc": [0.4, 0.7, 0.8, -0.1, -0.4, -0.8, 0.2, 0.5, 0.3, 0.9],
+      "rhythm_profile": {"avg_sing": 0.415, "avg_speak": 0.335, "avg_action": 0.185, "avg_fight": 0.065}
+    }
+  },
+
+  "pattern_comparison": [
+    {"pattern": "悲剧递进型", "description": "情感持续下行，从高潮渐入低谷，常用于英雄悲剧",
+     "sentiment_trend": "单调递减", "avg_sentiment_range": 1.4, "play_count": 2, "example": "霸王别姬"},
+    {"pattern": "冤案昭雪型", "description": "先抑后扬，中间低谷后急速回升，常用于公案戏",
+     "sentiment_trend": "V型反弹", "avg_sentiment_range": 1.2, "play_count": 3, "example": "窦娥冤"},
+    {"pattern": "清官断案型", "description": "波动上升，节奏紧凑，终场高潮",
+     "sentiment_trend": "波动上升", "avg_sentiment_range": 1.0, "play_count": 2, "example": "铡美案"},
+    {"pattern": "悲欢离合型", "description": "大幅起伏，先喜后悲再喜，情感跨度大",
+     "sentiment_trend": "U型反弹", "avg_sentiment_range": 1.7, "play_count": 3, "example": "牡丹亭"}
+  ],
+
+  "type_rhythm_comparison": [
+    {"play_type": "历史戏", "avg_sing": 0.28, "avg_speak": 0.36, "avg_action": 0.21, "avg_fight": 0.15},
+    {"play_type": "公案戏", "avg_sing": 0.30, "avg_speak": 0.43, "avg_action": 0.20, "avg_fight": 0.07},
+    {"play_type": "家庭戏", "avg_sing": 0.38, "avg_speak": 0.36, "avg_action": 0.18, "avg_fight": 0.08}
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "archetype_hierarchy": {
+    "生": {
+      "description": "男性角色",
+      "subtypes": ["老生", "小生", "武生", "红生", "娃娃生"]
+    },
+    "旦": {
+      "description": "女性角色",
+      "subtypes": ["青衣", "花旦", "刀马旦", "老旦", "武旦", "花衫"]
+    },
+    "净": {
+      "description": "花脸角色，性格刚烈或粗犷",
+      "subtypes": ["铜锤花脸", "架子花脸", "武净"]
+    },
+    "丑": {
+      "description": "喜剧角色或反派",
+      "subtypes": ["文丑", "武丑", "彩旦"]
+    }
+  },
+
+  "period_distribution": [
+    {
+      "period": "明清",
+      "老生": 28, "小生": 15, "武生": 12, "红生": 3, "娃娃生": 2,
+      "青衣": 22, "花旦": 18, "刀马旦": 8, "老旦": 10, "武旦": 5, "花衫": 3,
+      "铜锤花脸": 8, "架子花脸": 12, "武净": 4,
+      "文丑": 10, "武丑": 5, "彩旦": 3
+    },
+    {
+      "period": "民国",
+      "老生": 22, "小生": 18, "武生": 10, "红生": 2, "娃娃生": 1,
+      "青衣": 25, "花旦": 22, "刀马旦": 10, "老旦": 8, "武旦": 6, "花衫": 8,
+      "铜锤花脸": 6, "架子花脸": 10, "武净": 3,
+      "文丑": 8, "武丑": 3, "彩旦": 2
+    },
+    {
+      "period": "1949后",
+      "老生": 18, "小生": 10, "武生": 14, "红生": 4, "娃娃生": 1,
+      "青衣": 18, "花旦": 12, "刀马旦": 14, "老旦": 10, "武旦": 8, "花衫": 5,
+      "铜锤花脸": 5, "架子花脸": 8, "武净": 5,
+      "文丑": 6, "武丑": 4, "彩旦": 2
+    },
+    {
+      "period": "当代",
+      "老生": 12, "小生": 8, "武生": 10, "红生": 2, "娃娃生": 1,
+      "青衣": 15, "花旦": 14, "刀马旦": 12, "老旦": 8, "武旦": 10, "花衫": 10,
+      "铜锤花脸": 4, "架子花脸": 6, "武净": 4,
+      "文丑": 5, "武丑": 4, "彩旦": 3
+    }
+  ],
+
+  "feature_archetype_mapping": [
+    {"feature": "豪迈刚烈", "archetype": "净", "strength": 0.92},
+    {"feature": "忠义正直", "archetype": "老生", "strength": 0.88},
+    {"feature": "温婉端庄", "archetype": "青衣", "strength": 0.95},
+    {"feature": "活泼俏皮", "archetype": "花旦", "strength": 0.90},
+    {"feature": "英武飒爽", "archetype": "刀马旦", "strength": 0.87},
+    {"feature": "奸诈狡猾", "archetype": "丑", "strength": 0.85},
+    {"feature": "文雅俊秀", "archetype": "小生", "strength": 0.91},
+    {"feature": "勇猛威武", "archetype": "武生", "strength": 0.89},
+    {"feature": "刚正不阿", "archetype": "铜锤花脸", "strength": 0.86},
+    {"feature": "慈祥和蔼", "archetype": "老旦", "strength": 0.93},
+    {"feature": "诙谐幽默", "archetype": "文丑", "strength": 0.88},
+    {"feature": "威严庄重", "archetype": "架子花脸", "strength": 0.84},
+    {"feature": "痴情缠绵", "archetype": "小生", "strength": 0.78},
+    {"feature": "阴险毒辣", "archetype": "武净", "strength": 0.82},
+    {"feature": "机智灵动", "archetype": "武丑", "strength": 0.80}
+  ],
+
+  "characters": [
+    {"id": "char_001", "name": "项羽", "play_id": "play_001", "archetype": "净", "sub_archetype": "架子花脸", "gender": "男", "importance": 0.95, "predicted": false, "confidence": 1.0},
+    {"id": "char_002", "name": "虞姬", "play_id": "play_001", "archetype": "旦", "sub_archetype": "花衫", "gender": "女", "importance": 0.88, "predicted": false, "confidence": 1.0},
+    {"id": "char_003", "name": "刘邦", "play_id": "play_001", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.72, "predicted": false, "confidence": 1.0},
+    {"id": "char_004", "name": "韩信", "play_id": "play_001", "archetype": "生", "sub_archetype": "武生", "gender": "男", "importance": 0.65, "predicted": true, "confidence": 0.87},
+    {"id": "char_005", "name": "杨贵妃", "play_id": "play_002", "archetype": "旦", "sub_archetype": "花衫", "gender": "女", "importance": 0.95, "predicted": false, "confidence": 1.0},
+    {"id": "char_006", "name": "高力士", "play_id": "play_002", "archetype": "丑", "sub_archetype": "文丑", "gender": "男", "importance": 0.70, "predicted": false, "confidence": 1.0},
+    {"id": "char_007", "name": "裴力士", "play_id": "play_002", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.55, "predicted": true, "confidence": 0.82},
+    {"id": "char_008", "name": "窦娥", "play_id": "play_003", "archetype": "旦", "sub_archetype": "青衣", "gender": "女", "importance": 0.95, "predicted": false, "confidence": 1.0},
+    {"id": "char_009", "name": "张驴儿", "play_id": "play_003", "archetype": "丑", "sub_archetype": "文丑", "gender": "男", "importance": 0.65, "predicted": false, "confidence": 1.0},
+    {"id": "char_010", "name": "窦天章", "play_id": "play_003", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.60, "predicted": true, "confidence": 0.89},
+    {"id": "char_011", "name": "薛平贵", "play_id": "play_004", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.90, "predicted": false, "confidence": 1.0},
+    {"id": "char_012", "name": "王宝钏", "play_id": "play_004", "archetype": "旦", "sub_archetype": "青衣", "gender": "女", "importance": 0.92, "predicted": false, "confidence": 1.0},
+    {"id": "char_013", "name": "包拯", "play_id": "play_005", "archetype": "净", "sub_archetype": "铜锤花脸", "gender": "男", "importance": 0.93, "predicted": false, "confidence": 1.0},
+    {"id": "char_014", "name": "陈世美", "play_id": "play_005", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.78, "predicted": false, "confidence": 1.0},
+    {"id": "char_015", "name": "秦香莲", "play_id": "play_005", "archetype": "旦", "sub_archetype": "青衣", "gender": "女", "importance": 0.85, "predicted": false, "confidence": 1.0},
+    {"id": "char_016", "name": "杜丽娘", "play_id": "play_006", "archetype": "旦", "sub_archetype": "花旦", "gender": "女", "importance": 0.92, "predicted": false, "confidence": 1.0},
+    {"id": "char_017", "name": "柳梦梅", "play_id": "play_006", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.88, "predicted": false, "confidence": 1.0},
+    {"id": "char_018", "name": "诸葛亮", "play_id": "play_007", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.95, "predicted": false, "confidence": 1.0},
+    {"id": "char_019", "name": "司马懿", "play_id": "play_007", "archetype": "净", "sub_archetype": "架子花脸", "gender": "男", "importance": 0.82, "predicted": false, "confidence": 1.0},
+    {"id": "char_020", "name": "阿庆嫂", "play_id": "play_008", "archetype": "旦", "sub_archetype": "花旦", "gender": "女", "importance": 0.90, "predicted": false, "confidence": 1.0},
+    {"id": "char_021", "name": "郭建光", "play_id": "play_008", "archetype": "生", "sub_archetype": "武生", "gender": "男", "importance": 0.85, "predicted": true, "confidence": 0.84},
+    {"id": "char_022", "name": "白素贞", "play_id": "play_009", "archetype": "旦", "sub_archetype": "花衫", "gender": "女", "importance": 0.95, "predicted": false, "confidence": 1.0},
+    {"id": "char_023", "name": "许仙", "play_id": "play_009", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.85, "predicted": false, "confidence": 1.0},
+    {"id": "char_024", "name": "法海", "play_id": "play_009", "archetype": "净", "sub_archetype": "架子花脸", "gender": "男", "importance": 0.72, "predicted": false, "confidence": 1.0},
+    {"id": "char_025", "name": "郭暧", "play_id": "play_010", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.75, "predicted": true, "confidence": 0.86},
+    {"id": "char_026", "name": "公主", "play_id": "play_010", "archetype": "旦", "sub_archetype": "花旦", "gender": "女", "importance": 0.80, "predicted": false, "confidence": 1.0},
+    {"id": "char_027", "name": "唐代宗", "play_id": "play_010", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.70, "predicted": false, "confidence": 1.0},
+    {"id": "char_028", "name": "杨子荣", "play_id": "play_011", "archetype": "生", "sub_archetype": "武生", "gender": "男", "importance": 0.95, "predicted": false, "confidence": 1.0},
+    {"id": "char_029", "name": "座山雕", "play_id": "play_011", "archetype": "净", "sub_archetype": "架子花脸", "gender": "男", "importance": 0.82, "predicted": true, "confidence": 0.90},
+    {"id": "char_030", "name": "程婴", "play_id": "play_012", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.92, "predicted": false, "confidence": 1.0},
+    {"id": "char_031", "name": "赵武", "play_id": "play_012", "archetype": "生", "sub_archetype": "武生", "gender": "男", "importance": 0.75, "predicted": true, "confidence": 0.88},
+    {"id": "char_032", "name": "屠岸贾", "play_id": "play_012", "archetype": "净", "sub_archetype": "武净", "gender": "男", "importance": 0.80, "predicted": false, "confidence": 1.0}
+  ],
+
+  "prediction_model": {
+    "method": "RandomForest + 规则基线",
+    "accuracy": 0.87,
+    "f1_score": 0.85,
+    "features_used": ["性别", "年龄描述", "身份描述", "性格关键词", "唱", "念", "做", "打"],
+    "notes": "已标注数据5折交叉验证，最终选用RandomForest模型对未标注角色进行预测"
+  }
+}

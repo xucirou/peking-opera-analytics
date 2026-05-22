@@ -1,0 +1,17 @@
+# Claude
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 中间产物 / 草稿 (成员工作文件)
+outputs_c/
+*.code-workspace

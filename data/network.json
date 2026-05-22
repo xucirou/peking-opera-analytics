@@ -1,0 +1,125 @@
+{
+  "plays": {
+    "play_001": {
+      "play_title": "霸王别姬",
+      "play_type": "历史戏",
+      "nodes": [
+        {"id": "char_001", "name": "项羽", "archetype": "净", "sub_archetype": "架子花脸", "gender": "男", "importance": 0.95, "community": 1},
+        {"id": "char_002", "name": "虞姬", "archetype": "旦", "sub_archetype": "花衫", "gender": "女", "importance": 0.88, "community": 1},
+        {"id": "char_003", "name": "刘邦", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.72, "community": 2},
+        {"id": "char_004", "name": "韩信", "archetype": "生", "sub_archetype": "武生", "gender": "男", "importance": 0.65, "community": 2},
+        {"id": "char_aux_001", "name": "项伯", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.40, "community": 1},
+        {"id": "char_aux_002", "name": "范增", "archetype": "净", "sub_archetype": "架子花脸", "gender": "男", "importance": 0.50, "community": 1},
+        {"id": "char_aux_003", "name": "张良", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.45, "community": 2},
+        {"id": "char_aux_004", "name": "吕雉", "archetype": "旦", "sub_archetype": "青衣", "gender": "女", "importance": 0.35, "community": 2}
+      ],
+      "edges": [
+        {"source": "char_001", "target": "char_002", "weight": 10, "type": "爱情"},
+        {"source": "char_001", "target": "char_003", "weight": 8, "type": "对立"},
+        {"source": "char_001", "target": "char_004", "weight": 5, "type": "对立"},
+        {"source": "char_003", "target": "char_004", "weight": 7, "type": "君臣"},
+        {"source": "char_001", "target": "char_aux_001", "weight": 6, "type": "亲属"},
+        {"source": "char_001", "target": "char_aux_002", "weight": 8, "type": "君臣"},
+        {"source": "char_003", "target": "char_aux_003", "weight": 7, "type": "君臣"},
+        {"source": "char_003", "target": "char_aux_004", "weight": 4, "type": "爱情"},
+        {"source": "char_aux_001", "target": "char_aux_003", "weight": 3, "type": "其他"},
+        {"source": "char_004", "target": "char_aux_002", "weight": 4, "type": "对立"}
+      ]
+    },
+    "play_003": {
+      "play_title": "窦娥冤",
+      "play_type": "公案戏",
+      "nodes": [
+        {"id": "char_008", "name": "窦娥", "archetype": "旦", "sub_archetype": "青衣", "gender": "女", "importance": 0.95, "community": 1},
+        {"id": "char_009", "name": "张驴儿", "archetype": "丑", "sub_archetype": "文丑", "gender": "男", "importance": 0.65, "community": 2},
+        {"id": "char_010", "name": "窦天章", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.60, "community": 1},
+        {"id": "char_aux_005", "name": "蔡婆婆", "archetype": "旦", "sub_archetype": "老旦", "gender": "女", "importance": 0.55, "community": 1},
+        {"id": "char_aux_006", "name": "县令", "archetype": "丑", "sub_archetype": "文丑", "gender": "男", "importance": 0.45, "community": 2},
+        {"id": "char_aux_007", "name": "张父", "archetype": "丑", "sub_archetype": "文丑", "gender": "男", "importance": 0.35, "community": 2}
+      ],
+      "edges": [
+        {"source": "char_008", "target": "char_010", "weight": 6, "type": "亲属"},
+        {"source": "char_008", "target": "char_009", "weight": 9, "type": "对立"},
+        {"source": "char_008", "target": "char_aux_005", "weight": 7, "type": "亲属"},
+        {"source": "char_009", "target": "char_aux_006", "weight": 6, "type": "其他"},
+        {"source": "char_009", "target": "char_aux_007", "weight": 5, "type": "亲属"},
+        {"source": "char_010", "target": "char_aux_006", "weight": 4, "type": "对立"},
+        {"source": "char_008", "target": "char_aux_006", "weight": 6, "type": "对立"},
+        {"source": "char_aux_005", "target": "char_aux_007", "weight": 2, "type": "其他"}
+      ]
+    },
+    "play_005": {
+      "play_title": "铡美案",
+      "play_type": "公案戏",
+      "nodes": [
+        {"id": "char_013", "name": "包拯", "archetype": "净", "sub_archetype": "铜锤花脸", "gender": "男", "importance": 0.93, "community": 1},
+        {"id": "char_014", "name": "陈世美", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.78, "community": 2},
+        {"id": "char_015", "name": "秦香莲", "archetype": "旦", "sub_archetype": "青衣", "gender": "女", "importance": 0.85, "community": 1},
+        {"id": "char_aux_008", "name": "公主", "archetype": "旦", "sub_archetype": "花旦", "gender": "女", "importance": 0.55, "community": 2},
+        {"id": "char_aux_009", "name": "王延龄", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.42, "community": 1},
+        {"id": "char_aux_010", "name": "韩琪", "archetype": "生", "sub_archetype": "武生", "gender": "男", "importance": 0.38, "community": 2}
+      ],
+      "edges": [
+        {"source": "char_013", "target": "char_014", "weight": 10, "type": "对立"},
+        {"source": "char_013", "target": "char_015", "weight": 7, "type": "其他"},
+        {"source": "char_014", "target": "char_015", "weight": 9, "type": "爱情"},
+        {"source": "char_014", "target": "char_aux_008", "weight": 5, "type": "爱情"},
+        {"source": "char_013", "target": "char_aux_009", "weight": 4, "type": "君臣"},
+        {"source": "char_014", "target": "char_aux_010", "weight": 3, "type": "君臣"},
+        {"source": "char_015", "target": "char_aux_010", "weight": 2, "type": "其他"}
+      ]
+    },
+    "play_006": {
+      "play_title": "牡丹亭",
+      "play_type": "家庭戏",
+      "nodes": [
+        {"id": "char_016", "name": "杜丽娘", "archetype": "旦", "sub_archetype": "花旦", "gender": "女", "importance": 0.92, "community": 1},
+        {"id": "char_017", "name": "柳梦梅", "archetype": "生", "sub_archetype": "小生", "gender": "男", "importance": 0.88, "community": 1},
+        {"id": "char_aux_011", "name": "杜宝", "archetype": "生", "sub_archetype": "老生", "gender": "男", "importance": 0.55, "community": 2},
+        {"id": "char_aux_012", "name": "杜母", "archetype": "旦", "sub_archetype": "老旦", "gender": "女", "importance": 0.48, "community": 2},
+        {"id": "char_aux_013", "name": "春香", "archetype": "旦", "sub_archetype": "花旦", "gender": "女", "importance": 0.52, "community": 1},
+        {"id": "char_aux_014", "name": "陈最良", "archetype": "丑", "sub_archetype": "文丑", "gender": "男", "importance": 0.35, "community": 2}
+      ],
+      "edges": [
+        {"source": "char_016", "target": "char_017", "weight": 10, "type": "爱情"},
+        {"source": "char_016", "target": "char_aux_011", "weight": 6, "type": "亲属"},
+        {"source": "char_016", "target": "char_aux_012", "weight": 5, "type": "亲属"},
+        {"source": "char_016", "target": "char_aux_013", "weight": 7, "type": "其他"},
+        {"source": "char_017", "target": "char_aux_011", "weight": 4, "type": "对立"},
+        {"source": "char_aux_011", "target": "char_aux_014", "weight": 3, "type": "其他"},
+        {"source": "char_016", "target": "char_aux_014", "weight": 2, "type": "其他"}
+      ]
+    }
+  },
+
+  "network_metrics": [
+    {"play_id": "play_001", "play_title": "霸王别姬", "play_type": "历史戏",
+      "node_count": 8, "edge_count": 10, "density": 0.357, "avg_degree": 2.5,
+      "avg_clustering": 0.52, "avg_path_length": 1.8, "diameter": 3,
+      "modularity": 0.48, "community_count": 2,
+      "top_centrality_character": "项羽", "top_centrality_value": 0.72},
+    {"play_id": "play_003", "play_title": "窦娥冤", "play_type": "公案戏",
+      "node_count": 6, "edge_count": 8, "density": 0.533, "avg_degree": 2.67,
+      "avg_clustering": 0.45, "avg_path_length": 1.67, "diameter": 3,
+      "modularity": 0.55, "community_count": 2,
+      "top_centrality_character": "窦娥", "top_centrality_value": 0.78},
+    {"play_id": "play_005", "play_title": "铡美案", "play_type": "公案戏",
+      "node_count": 6, "edge_count": 7, "density": 0.467, "avg_degree": 2.33,
+      "avg_clustering": 0.38, "avg_path_length": 1.83, "diameter": 3,
+      "modularity": 0.52, "community_count": 2,
+      "top_centrality_character": "包拯", "top_centrality_value": 0.75},
+    {"play_id": "play_006", "play_title": "牡丹亭", "play_type": "家庭戏",
+      "node_count": 6, "edge_count": 7, "density": 0.467, "avg_degree": 2.33,
+      "avg_clustering": 0.58, "avg_path_length": 1.5, "diameter": 2,
+      "modularity": 0.42, "community_count": 2,
+      "top_centrality_character": "杜丽娘", "top_centrality_value": 0.70}
+  ],
+
+  "type_comparison": [
+    {"play_type": "历史戏", "avg_density": 0.31, "avg_clustering": 0.44, "avg_modularity": 0.50, "sample_count": 4},
+    {"play_type": "公案戏", "avg_density": 0.45, "avg_clustering": 0.40, "avg_modularity": 0.53, "sample_count": 3},
+    {"play_type": "家庭戏", "avg_density": 0.42, "avg_clustering": 0.52, "avg_modularity": 0.40, "sample_count": 3}
+  ],
+
+  "relationship_types": ["爱情", "亲属", "君臣", "对立", "友谊", "其他"]
+}

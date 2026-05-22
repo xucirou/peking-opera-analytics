@@ -1,0 +1,153 @@
+{
+  "plays": [
+    {
+      "id": "play_001",
+      "title": "霸王别姬",
+      "type": "历史戏",
+      "subtype": "英雄悲剧",
+      "period": "民国",
+      "year": 1922,
+      "source": "传统剧目改编",
+      "description": "秦末楚汉相争，项羽被围垓下，虞姬自刎殉情",
+      "scene_count": 8,
+      "character_count": 12
+    },
+    {
+      "id": "play_002",
+      "title": "贵妃醉酒",
+      "type": "历史戏",
+      "subtype": "宫廷戏",
+      "period": "明清",
+      "year": 1790,
+      "source": "传统剧目",
+      "description": "杨贵妃在百花亭设宴等候玄宗，闻讯转赴西宫，借酒浇愁",
+      "scene_count": 4,
+      "character_count": 8
+    },
+    {
+      "id": "play_003",
+      "title": "窦娥冤",
+      "type": "公案戏",
+      "subtype": "冤案昭雪",
+      "period": "明清",
+      "year": 1580,
+      "source": "元杂剧改编",
+      "description": "窦娥被诬告杀人，临刑前发下三桩誓愿，后其父为官昭雪",
+      "scene_count": 6,
+      "character_count": 15
+    },
+    {
+      "id": "play_004",
+      "title": "红鬃烈马",
+      "type": "家庭戏",
+      "subtype": "爱情伦理",
+      "period": "明清",
+      "year": 1750,
+      "source": "传统剧目",
+      "description": "薛平贵与王宝钏的爱情故事，历经分离终得团圆",
+      "scene_count": 12,
+      "character_count": 18
+    },
+    {
+      "id": "play_005",
+      "title": "铡美案",
+      "type": "公案戏",
+      "subtype": "清官断案",
+      "period": "明清",
+      "year": 1800,
+      "source": "传统剧目",
+      "description": "包拯秉公执法，铡杀忘恩负义的陈世美",
+      "scene_count": 5,
+      "character_count": 10
+    },
+    {
+      "id": "play_006",
+      "title": "牡丹亭",
+      "type": "家庭戏",
+      "subtype": "爱情传奇",
+      "period": "明清",
+      "year": 1598,
+      "source": "汤显祖原作",
+      "description": "杜丽娘梦遇柳梦梅，因情而死又因情复生",
+      "scene_count": 10,
+      "character_count": 14
+    },
+    {
+      "id": "play_007",
+      "title": "空城计",
+      "type": "历史戏",
+      "subtype": "战争谋略",
+      "period": "明清",
+      "year": 1700,
+      "source": "三国演义改编",
+      "description": "诸葛亮以空城退司马懿大军",
+      "scene_count": 3,
+      "character_count": 8
+    },
+    {
+      "id": "play_008",
+      "title": "沙家浜",
+      "type": "历史戏",
+      "subtype": "革命现代戏",
+      "period": "1949后",
+      "year": 1964,
+      "source": "现代创作",
+      "description": "抗日战争时期，沙家浜军民与日伪军斗智斗勇",
+      "scene_count": 10,
+      "character_count": 12
+    },
+    {
+      "id": "play_009",
+      "title": "白蛇传",
+      "type": "家庭戏",
+      "subtype": "神话爱情",
+      "period": "民国",
+      "year": 1930,
+      "source": "民间传说改编",
+      "description": "白素贞与许仙的人妖之恋，历经法海阻挠",
+      "scene_count": 8,
+      "character_count": 10
+    },
+    {
+      "id": "play_010",
+      "title": "打金枝",
+      "type": "家庭戏",
+      "subtype": "家庭伦理",
+      "period": "明清",
+      "year": 1760,
+      "source": "传统剧目",
+      "description": "郭暧醉打公主妻子，唐代宗巧妙调解夫妻矛盾",
+      "scene_count": 4,
+      "character_count": 8
+    },
+    {
+      "id": "play_011",
+      "title": "智取威虎山",
+      "type": "历史戏",
+      "subtype": "革命现代戏",
+      "period": "1949后",
+      "year": 1958,
+      "source": "现代创作",
+      "description": "杨子荣深入匪穴智擒座山雕",
+      "scene_count": 10,
+      "character_count": 14
+    },
+    {
+      "id": "play_012",
+      "title": "赵氏孤儿",
+      "type": "历史戏",
+      "subtype": "忠义复仇",
+      "period": "明清",
+      "year": 1730,
+      "source": "元杂剧改编",
+      "description": "程婴舍子救孤，赵武长大后复仇",
+      "scene_count": 7,
+      "character_count": 16
+    }
+  ],
+  "metadata": {
+    "period_categories": ["明清", "民国", "1949后", "当代"],
+    "play_types": ["历史戏", "家庭戏", "公案戏", "爱情戏", "神话戏"],
+    "total_plays": 12
+  }
+}
