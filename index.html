@@ -6,1007 +6,697 @@
 <title>京剧数据可视分析系统 | 赛题I</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
 /* ============================================================
-   CSS VARIABLES — 古典新中式配色体系
+   CSS VARIABLES — 淡雅新中式配色
    ============================================================ */
 :root {
-  --porcelain: #fef9f3;
-  --rice-paper: #f5ecd7;
-  --rice-paper-dark: #e8dcc8;
-  --indigo: #1e3a5f;
-  --indigo-light: #2d5a8a;
-  --indigo-pale: #e8eef5;
-  --vermilion: #c1443a;
-  --vermilion-dark: #8b1a1f;
-  --vermilion-pale: #fce8e6;
-  --gold: #c9a86c;
-  --gold-light: #e8d5b0;
-  --gold-pale: #faf3e6;
-  --ink: #2c2416;
-  --ink-light: #5c4e3a;
-  --ink-lighter: #8a7a60;
-  --jade: #6b9e6b;
+  --bg-app: #ebf0e6;
+  --panel-glass: rgba(255, 255, 255, 0.5);
+  --border-glass: rgba(255, 255, 255, 0.7);
+  
+  --left-bg-top: #dde6d8;
+  --left-bg-bot: #92ab96;
+  
+  --right-card-bg-top: #fcf6ef;
+  --right-card-bg-bot: #e8dcc8;
 
-  --sheng: #3a6b8c;
-  --dan: #c1443a;
-  --jing: #d4953a;
-  --chou: #6b9e6b;
+  --text-main: #2e362f;
+  --text-muted: #6b7a6d;
+  --accent-green: #708c75;
+  --accent-gold: #cba87c;
+  
+  --shadow-sm: 0 4px 12px rgba(100, 120, 100, 0.08);
+  --shadow-btn: 0 4px 8px rgba(100, 120, 100, 0.15);
 
-  --text-primary: #2c2416;
-  --text-secondary: #6b5e4e;
-  --text-muted: #9a8b78;
-
-  --border-subtle: #e0d5c0;
-  --border-strong: #c9a86c;
-
-  --shadow-sm: 0 1px 4px rgba(44,36,22,0.05);
-  --shadow-md: 0 4px 20px rgba(44,36,22,0.08);
-  --shadow-lg: 0 8px 40px rgba(44,36,22,0.12);
-
-  --radius-sm: 3px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --sidebar-w: 260px;
-  --header-h: 64px;
-  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-
-  --font-calligraphy: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
-  --font-body: 'Noto Serif SC', 'Source Han Serif SC', 'SimSun', 'STSong', serif;
+  --font-calligraphy: 'Ma Shan Zheng', 'STKaiti', cursive;
+  --font-body: 'Noto Serif SC', serif;
 }
 
-/* ============================================================
-   BASE RESET & BODY — 宣纸底纹 + 水墨晕染
-   ============================================================ */
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   font-family: var(--font-body);
-  background-color: #f0e8d5;
-  color: var(--text-primary);
-  display: flex;
+  background-color: var(--bg-app);
+  color: var(--text-main);
   height: 100vh;
   overflow: hidden;
-  position: relative;
-}
-
-/* 宣纸纹理基底 */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    /* 纸纤维纹理 */
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,119,80,0.012) 2px, rgba(139,119,80,0.012) 3px),
-    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(139,119,80,0.008) 3px, rgba(139,119,80,0.008) 4px),
-    /* 泛黄基调 */
-    linear-gradient(180deg, #f5ecd7 0%, #efe4cc 30%, #f2e8d2 60%, #f5ecd7 100%);
-}
-
-/* 极淡水墨山水晕染 */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.06;
-  background:
-    radial-gradient(ellipse at 15% 80%, #2c2416 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 20%, #2c2416 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, #1e3a5f 0%, transparent 70%),
-    radial-gradient(circle at 75% 70%, #c1443a 0%, transparent 40%),
-    radial-gradient(ellipse at 25% 30%, #1e3a5f 0%, transparent 50%),
-    radial-gradient(circle at 60% 40%, #c9a86c 0%, transparent 35%);
+  display: flex;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ============================================================
-   SIDEBAR — 黛蓝底 · 金色点缀 · 窗棂装饰
+   LEFT SIDEBAR (导航栏)
    ============================================================ */
-.sidebar {
-  width: var(--sidebar-w);
-  background: linear-gradient(175deg, #1a3150 0%, #1e3a5f 30%, #1a3150 100%);
-  color: #d4c8a8;
+.sidebar-left {
+  width: 180px;
+  background: linear-gradient(180deg, var(--left-bg-top) 0%, var(--left-bg-bot) 100%);
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  border-right: 2px solid var(--gold);
-  z-index: 100;
+  padding: 20px 16px;
   position: relative;
-  box-shadow: 2px 0 24px rgba(26,49,80,0.25);
+  z-index: 10;
+  box-shadow: 4px 0 16px rgba(112,140,117,0.15);
+  border-right: 1px solid rgba(255,255,255,0.4);
 }
 
-/* 侧栏窗棂纹装饰 (顶) */
-.sidebar::before {
+.sidebar-left::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 6px;
-  background: repeating-linear-gradient(90deg,
-    var(--gold) 0px, var(--gold) 8px,
-    transparent 8px, transparent 12px,
-    var(--gold) 12px, var(--gold) 16px,
-    transparent 16px, transparent 24px);
-  opacity: 0.5;
+  inset: 0;
+  background: url('./icons/云纹.jpg') no-repeat bottom left;
+  background-size: 150%;
+  mix-blend-mode: screen; 
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* 侧栏窗棂纹装饰 (底) */
-.sidebar::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 4px;
-  background: repeating-linear-gradient(90deg,
-    var(--gold) 0px, var(--gold) 6px,
-    transparent 6px, transparent 10px);
-  opacity: 0.4;
-}
-
-.sidebar-header {
-  padding: 28px 20px 20px;
-  border-bottom: 1px solid rgba(201,168,108,0.25);
+.left-header {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  position: relative;
+  margin-bottom: 24px;
+}
+.left-header img {
+  width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(255,255,255,0.8));
 }
 
-/* Logo — 篆刻印章风格 */
-.sidebar-header .logo-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 10px;
-  background: var(--vermilion);
+.nav-container {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  color: #fff;
-  font-family: var(--font-calligraphy);
-  position: relative;
-  clip-path: polygon(8% 3%, 92% 3%, 97% 8%, 97% 92%, 92% 97%, 8% 97%, 3% 92%, 3% 8%);
-  border: none;
-  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.3), 0 2px 12px rgba(193,68,58,0.3);
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
 }
-
-.sidebar-header h2 {
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--gold);
-  letter-spacing: 4px;
-  font-family: var(--font-calligraphy);
-}
-
-.sidebar-header .subtitle {
-  font-size: 10px;
-  color: rgba(180,160,130,0.7);
-  margin-top: 4px;
-  letter-spacing: 3px;
-  font-weight: 300;
-}
-
-.sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
-
-.nav-section-title {
-  font-size: 10px;
-  letter-spacing: 4px;
-  color: rgba(180,160,130,0.5);
-  padding: 18px 20px 8px;
-  font-weight: 500;
-}
+.nav-container::-webkit-scrollbar { display: none; }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 20px;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 10px 14px;
   cursor: pointer;
-  transition: var(--transition);
-  border-left: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.5), 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.nav-item:hover, .nav-item.active {
+  background: linear-gradient(90deg, #ffffff 0%, #e6f0e6 100%);
+  border-color: var(--accent-green);
+  box-shadow: var(--shadow-btn);
+  transform: translateX(4px);
+}
+
+.nav-text {
   font-size: 14px;
-  color: #b0a080;
-  text-decoration: none;
-  margin: 1px 8px;
-  border-radius: 0 4px 4px 0;
-}
-
-.nav-item:hover {
-  background: rgba(201,168,108,0.08);
-  color: #d4c8a8;
-}
-
-.nav-item.active {
-  background: rgba(201,168,108,0.12);
-  color: var(--gold);
-  border-left-color: var(--gold);
   font-weight: 600;
-}
-
-.nav-item .nav-icon {
-  width: 22px;
-  text-align: center;
-  font-size: 15px;
-  font-family: var(--font-calligraphy);
-  font-weight: 400;
-}
-
-/* 导航序号 — 篆刻印章式 */
-.nav-item .nav-seal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  background: rgba(201,168,108,0.15);
-  color: var(--gold);
-  font-size: 11px;
-  font-family: var(--font-calligraphy);
-  clip-path: polygon(10% 5%, 90% 5%, 95% 10%, 95% 90%, 90% 95%, 10% 95%, 5% 90%, 5% 10%);
-}
-
-.nav-item.active .nav-seal {
-  background: var(--vermilion);
-  color: #fff;
-}
-
-.sidebar-filters {
-  padding: 16px 20px;
-  border-top: 1px solid rgba(201,168,108,0.2);
-  position: relative;
-  z-index: 1;
-}
-
-.filter-label {
-  font-size: 11px;
-  color: rgba(180,160,130,0.7);
+  line-height: 1.3;
   letter-spacing: 2px;
-  margin-bottom: 8px;
+  color: var(--text-main);
+  width: 36px;
+}
+
+.nav-item img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.nav-icons-group {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  gap: -8px; 
 }
-
-.filter-label::before {
-  content: '◆';
-  font-size: 6px;
-  color: var(--gold);
-}
-
-.filter-select {
-  width: 100%;
-  padding: 9px 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(201,168,108,0.3);
-  color: #d4c8a8;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: 13px;
-  cursor: pointer;
-  outline: none;
-  transition: var(--transition);
-  margin-bottom: 2px;
-}
-
-.filter-select:hover { border-color: rgba(201,168,108,0.5); }
-.filter-select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,108,0.1); }
-.filter-select option { background: #1e3a5f; color: #d4c8a8; }
-
-.sidebar-footer {
-  padding: 14px 20px;
-  border-top: 1px solid rgba(201,168,108,0.2);
-  font-size: 10px;
-  color: rgba(180,160,130,0.5);
-  text-align: center;
-  letter-spacing: 2px;
-  position: relative;
-  z-index: 1;
+.nav-icons-group img {
+  width: 36px;
+  height: 36px;
+  margin-left: -6px;
 }
 
 /* ============================================================
-   MAIN CONTENT AREA
+   CENTER MAIN AREA (主视图区)
    ============================================================ */
-.main {
+.main-center {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   position: relative;
-  z-index: 1;
+  overflow: hidden;
+  padding: 0 20px 20px 20px;
 }
 
-.top-bar {
-  height: var(--header-h);
-  background: linear-gradient(180deg, rgba(254,249,243,0.95) 0%, rgba(250,243,230,0.92) 100%);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-subtle);
+.top-header {
+  height: 70px;
   display: flex;
   align-items: center;
-  padding: 0 36px;
-  gap: 18px;
+  justify-content: center;
   flex-shrink: 0;
   position: relative;
 }
-
-/* 顶栏底部回纹装饰线 */
-.top-bar::after {
-  content: '';
-  position: absolute;
-  bottom: -1px; left: 36px; right: 36px;
-  height: 2px;
-  background: repeating-linear-gradient(90deg,
-    var(--gold) 0px, var(--gold) 3px, transparent 3px, transparent 8px,
-    var(--gold) 8px, var(--gold) 10px, transparent 10px, transparent 16px,
-    var(--gold) 16px, var(--gold) 20px, transparent 20px, transparent 24px);
-  opacity: 0.3;
-}
-
-.top-bar .page-title {
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--ink);
-  letter-spacing: 3px;
+.top-header h1 {
   font-family: var(--font-calligraphy);
+  font-size: 32px;
+  letter-spacing: 6px;
+  color: var(--text-main);
+  text-shadow: 0 2px 6px rgba(255,255,255,0.8);
 }
-
-.top-bar .play-badge {
-  background: var(--vermilion);
-  color: #fff;
-  padding: 5px 16px;
-  font-size: 12px;
-  letter-spacing: 2px;
-  font-family: var(--font-body);
-  font-weight: 500;
-  clip-path: polygon(6% 0%, 94% 0%, 100% 15%, 100% 85%, 94% 100%, 6% 100%, 0% 85%, 0% 15%);
-}
-
-.top-bar .breadcrumb {
-  font-size: 12px;
+.breadcrumb-info {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
   color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
-  letter-spacing: 1px;
 }
 
-.content-area {
+.content-scroll {
   flex: 1;
+  background: var(--panel-glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
   overflow-y: auto;
-  padding: 28px 36px;
-  background: transparent;
   position: relative;
 }
 
-/* 内容区角落云纹装饰 */
-.content-area::before {
-  content: '';
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  width: 180px;
-  height: 120px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.04;
-  background:
-    radial-gradient(ellipse at 30% 50%, var(--ink) 0%, transparent 70%),
-    radial-gradient(ellipse at 50% 30%, var(--ink) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 60%, var(--ink) 0%, transparent 65%);
-  border-radius: 40%;
-}
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
-.page { display: none; position: relative; z-index: 1; }
-.page.active { display: block; }
-
-/* ============================================================
-   CARDS — 卷草纹边框 · 暖瓷白底 · 留白充裕
-   ============================================================ */
-.card-grid { display: grid; gap: 24px; }
+/* 整合旧版的 Grid 布局 */
+.card-grid { display: grid; gap: 16px; margin-bottom: 16px; }
 .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
 .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
 .card-grid.cols-2-1 { grid-template-columns: 2fr 1fr; }
 .card-grid.cols-1-2 { grid-template-columns: 1fr 2fr; }
-.card-grid.cols-full { grid-template-columns: 1fr; }
 
 .card {
-  background: linear-gradient(180deg, #fffefb 0%, #fefaf4 100%);
-  border-radius: 2px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-subtle);
-  overflow: hidden;
-  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 12px;
+  border: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
-/* 卡片四角装饰 */
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  border: 1px solid transparent;
-  border-image: repeating-linear-gradient(90deg,
-    var(--gold) 0px, var(--gold) 2px, transparent 2px, transparent 14px,
-    transparent 14px, transparent 20px) 1;
-  opacity: 0.25;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--gold-light);
-}
-
+/* 兼容旧版的带有 h3 的 Header 样式 */
 .card-header {
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--border-subtle);
+  padding: 12px 16px 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(250,243,230,0.3) 0%, transparent 100%);
 }
-
 .card-header h3 {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink);
-  letter-spacing: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  margin: 0;
 }
-
-.card-header h3 .header-dot {
+.card-header h3::before {
+  content: '';
   display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: var(--vermilion);
+  width: 4px;
+  height: 14px;
+  background: var(--accent-green);
   border-radius: 2px;
-  transform: rotate(45deg);
 }
-
-/* 子任务徽章 — 印章风格 */
 .card-badge {
   font-size: 10px;
-  padding: 3px 12px;
-  background: var(--vermilion);
-  color: #fff;
-  letter-spacing: 2px;
-  font-family: var(--font-calligraphy);
-  clip-path: polygon(8% 0%, 92% 0%, 100% 20%, 100% 80%, 92% 100%, 8% 100%, 0% 80%, 0% 20%);
-  font-weight: 400;
+  padding: 2px 8px;
+  background: rgba(112, 140, 117, 0.15);
+  color: var(--text-muted);
+  border-radius: 12px;
+  border: 1px solid rgba(112, 140, 117, 0.3);
 }
 
 .card-body {
-  padding: 20px 24px;
-  position: relative;
-  z-index: 1;
-}
-
-.chart-container { width: 100%; height: 360px; }
-.chart-container.tall { height: 440px; }
-.chart-container.short { height: 280px; }
-.chart-container.xshort { height: 200px; }
-
-/* ============================================================
-   NETWORK
-   ============================================================ */
-#network-svg { width: 100%; height: 100%; background: #fefdf9; }
-
-.network-container {
-  width: 100%;
-  height: 500px;
+  padding: 8px 16px 16px;
+  flex: 1;
   position: relative;
 }
 
+.chart-container { width: 100%; height: 260px; }
+.chart-container.tall { height: 380px; }
+.chart-container.short { height: 200px; }
+
+/* 兼容旧版的 Insight Box 样式并适配新配色 */
+.insight-box {
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px dashed var(--accent-gold);
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+.insight-box strong { color: var(--accent-green); font-weight: 600; }
+
+/* 兼容旧版 D3 网络图 Tooltip 及 Node Label */
+#network-svg { width: 100%; height: 100%; }
+.network-container { width: 100%; height: 100%; position: relative; }
 .network-tooltip {
   position: absolute;
-  background: rgba(30,58,95,0.95);
-  color: #e8d5b0;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: 6px;
   font-size: 12px;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s;
-  border: 1px solid var(--gold);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-sm);
   z-index: 10;
-  font-family: var(--font-body);
-  letter-spacing: 1px;
+}
+.node-label {
+  font-size: 11px;
+  fill: var(--text-main);
+  pointer-events: none;
+  text-anchor: middle;
+  font-weight: 500;
+  paint-order: stroke;
+  stroke: rgba(255,255,255,0.9);
+  stroke-width: 3px;
 }
 
 /* ============================================================
-   INSIGHT BOX — 竖排古籍批注风格
+   RIGHT SIDEBAR (筛选交互区)
    ============================================================ */
-.insight-box {
-  padding: 20px 24px;
-  background: linear-gradient(135deg, #fef9f3 0%, #faf3e6 100%);
-  border-left: 4px solid var(--vermilion);
-  font-size: 13px;
-  line-height: 2;
-  color: var(--text-secondary);
-  letter-spacing: 0.5px;
-  position: relative;
+.sidebar-right {
+  width: 220px;
+  background: rgba(255, 255, 255, 0.35);
+  border-left: 1px solid rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-right::-webkit-scrollbar { display: none; }
+
+.filter-card {
+  background: linear-gradient(135deg, var(--right-card-bg-top) 0%, var(--right-card-bg-bot) 100%);
+  border-radius: 12px;
+  padding: 14px 10px;
+  border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 4px 10px rgba(203,168,124,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-.insight-box::after {
-  content: '';
-  position: absolute;
-  top: 8px; right: 12px;
-  width: 24px; height: 24px;
-  border: 1px solid rgba(201,168,108,0.3);
-  border-radius: 50%;
-  opacity: 0.5;
-}
-
-.insight-box strong {
-  color: var(--vermilion-dark);
+.filter-select {
+  width: 90%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--accent-gold);
+  color: #5c4d3c;
+  font-size: 14px;
   font-weight: 600;
+  font-family: var(--font-body);
+  text-align: center;
+  text-align-last: center;
+  padding-bottom: 4px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.select-wrapper::after {
+  content: '▼';
+  position: absolute;
+  right: 10px;
+  top: 2px;
+  font-size: 10px;
+  color: var(--accent-gold);
+  pointer-events: none;
 }
 
-/* ============================================================
-   CROSS-FILTER HINT
-   ============================================================ */
-.cross-filter-hint {
-  font-size: 13px;
-  color: var(--text-secondary);
-  padding: 14px 20px;
-  background: linear-gradient(135deg, #fef9f3 0%, #faf3e6 100%);
-  border-radius: var(--radius-sm);
-  margin-bottom: 20px;
-  border: 1px dashed var(--gold);
-  letter-spacing: 1px;
+.filter-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 50px;
+}
+.filter-images img {
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.action-btn {
+  background: var(--accent-green);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-btn);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.action-btn:hover { background: #5a7560; }
+.action-btn.btn-outline {
+  background: rgba(255,255,255,0.8);
+  color: var(--text-main);
+  border: 1px solid var(--border-glass);
+}
+.action-btn.btn-outline:hover { background: #fff; }
+
+.filter-summary {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px dashed var(--accent-gold);
+  margin-top: auto;
+}
+.summary-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
-
-/* ============================================================
-   LEGEND / MISC
-   ============================================================ */
-.legend-inline {
+.summary-title::before {
+  content: ''; display: inline-block; width: 4px; height: 12px; background: var(--accent-gold);
+}
+.tag-list {
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: var(--text-secondary);
+  flex-direction: column;
+  gap: 6px;
+}
+.tag-item {
+  background: rgba(235, 240, 230, 0.8);
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  margin-right: 6px;
-  transform: rotate(45deg);
-}
+@keyframes fadeIn { from { opacity: 0; filter: blur(2px); transform: translateY(5px); } to { opacity: 1; filter: blur(0); transform: translateY(0); } }
 
-/* ============================================================
-   STORY CONTAINER
-   ============================================================ */
-#story-container .insight-box {
-  margin-bottom: 12px;
-}
-
-/* ============================================================
-   SCROLLBAR — 古雅细条
-   ============================================================ */
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d0c8b4; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #b0a090; }
-
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes inkReveal {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.page.active .card {
-  animation: inkReveal 0.5s ease forwards;
-}
-.page.active .card:nth-child(2) { animation-delay: 0.06s; }
-.page.active .card:nth-child(3) { animation-delay: 0.12s; }
-.page.active .card:nth-child(4) { animation-delay: 0.18s; }
-
-/* ============================================================
-   D3 NETWORK STYLES
-   ============================================================ */
-.link { stroke: #d0c8b4; stroke-opacity: 0.55; }
-.link.love { stroke: #c1443a; stroke-opacity: 0.7; }
-.link.oppose { stroke: #8b1a1f; stroke-opacity: 0.65; }
-.link.kin { stroke: #6b9e6b; stroke-opacity: 0.7; }
-.link.ruler { stroke: #c9a86c; stroke-opacity: 0.7; }
-.node-label { font-size: 11px; fill: #2c2416; pointer-events: none; text-anchor: middle;
-  font-family: var(--font-body); letter-spacing: 1px; }
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 1400px) {
-  .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
-  .card-grid.cols-2-1, .card-grid.cols-1-2 { grid-template-columns: 1fr; }
-}
+::-webkit-scrollbar-thumb { background: rgba(112, 140, 117, 0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(112, 140, 117, 0.6); }
 </style>
 </head>
 <body>
 
-<!-- ==================== SIDEBAR ==================== -->
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo-icon">京</div>
-    <h2>京剧可视分析</h2>
-    <div class="subtitle">PEKING OPERA ANALYTICS</div>
+<aside class="sidebar-left">
+  <div class="left-header">
+    <img src="./icons/左栏标题.png" alt="京剧">
   </div>
-
-  <nav class="sidebar-nav">
-    <div class="nav-section-title">分 析 模 块</div>
+  
+  <nav class="nav-container">
     <div class="nav-item active" data-page="page-overview">
-      <span class="nav-seal">总</span> 系统总览
+      <div class="nav-text">系统<br>总览</div>
+      <img src="./icons/系统总览.png">
     </div>
     <div class="nav-item" data-page="page-archetype">
-      <span class="nav-seal">壹</span> 行当分析
+      <div class="nav-text">行当<br>分析</div>
+      <div class="nav-icons-group">
+        <img src="./icons/白脸.png">
+      </div>
     </div>
     <div class="nav-item" data-page="page-network">
-      <span class="nav-seal">贰</span> 角色关系网络
+      <div class="nav-text">角色<br>网络</div>
+      <img src="./icons/角色网络.png">
     </div>
     <div class="nav-item" data-page="page-theme">
-      <span class="nav-seal">叁</span> 主题分析
+      <div class="nav-text">主题<br>分析</div>
+      <img src="./icons/主题分析.png">
     </div>
     <div class="nav-item" data-page="page-narrative">
-      <span class="nav-seal">肆</span> 叙事结构
+      <div class="nav-text">叙事<br>结构</div>
+      <img src="./icons/叙事结构.png">
     </div>
     <div class="nav-item" data-page="page-comprehensive">
-      <span class="nav-seal">伍</span> 综合分析
+      <div class="nav-text">综合<br>分析</div>
+      <img src="./icons/综合分析.png">
     </div>
   </nav>
-
-  <div class="sidebar-filters">
-    <label class="filter-label">当前剧目</label>
-    <select class="filter-select" id="global-play-select">
-      <option value="all">全部剧目</option>
-    </select>
-    <label class="filter-label" style="margin-top:16px;">年代区间</label>
-    <select class="filter-select" id="global-period-select">
-      <option value="all">全部年代</option>
-      <option value="明清">明 清</option>
-      <option value="民国">民 国</option>
-      <option value="1949后">一九四九后</option>
-      <option value="当代">当 代</option>
-    </select>
-    <label class="filter-label" style="margin-top:16px;">剧目类型</label>
-    <select class="filter-select" id="global-type-select">
-      <option value="all">全部类型</option>
-      <option value="历史戏">历史戏</option>
-      <option value="公案戏">公案戏</option>
-      <option value="家庭戏">家庭戏</option>
-    </select>
-  </div>
-
-  <div class="sidebar-footer">
-    赛题 Ⅰ · 数据可视分析与人文创意
-  </div>
 </aside>
 
-<!-- ==================== MAIN ==================== -->
-<div class="main">
-  <header class="top-bar">
-    <span class="page-title" id="current-page-title">系统总览</span>
-    <span class="play-badge" id="current-play-badge">全部剧目</span>
-    <div class="breadcrumb">
-      <span>赛题Ⅰ</span> <span>·</span> <span id="breadcrumb-page">系统总览</span>
+<main class="main-center">
+  <header class="top-header">
+    <h1>京剧可视分析</h1>
+    <div class="breadcrumb-info">
+      <span id="current-play-badge">全部剧目</span> | <span id="breadcrumb-page">系统总览</span>
     </div>
   </header>
-
-  <div class="content-area" id="content-area">
-
-    <!-- ===== PAGE 0: OVERVIEW ===== -->
+  
+  <div class="content-scroll" id="content-area">
+    
     <div class="page active" id="page-overview">
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>数据集概览</h3></div>
-          <div class="card-body">
-            <div class="chart-container short" id="chart-overview-types"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>年代分布</h3></div>
-          <div class="card-body">
-            <div class="chart-container short" id="chart-overview-periods"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="margin-bottom:24px;">
-        <div class="card-header"><h3><span class="header-dot"></span>分析系统架构</h3></div>
+      <div class="card" style="margin-bottom: 16px;">
+        <div class="card-header"><h3>剧目类型分布</h3></div>
         <div class="card-body">
-          <div class="chart-container short" id="chart-architecture"></div>
+          <div class="chart-container short" id="chart-overview-types"></div>
         </div>
       </div>
       <div class="card">
-        <div class="card-header"><h3><span class="header-dot"></span>研究概览</h3></div>
+        <div class="card-header"><h3>年代分布趋势</h3></div>
         <div class="card-body">
-          <div class="insight-box">
-            <strong>本系统</strong>基于十二部跨来源、跨流派的京剧剧本数据，从<strong>行当分类</strong>、<strong>角色关系网络</strong>、<strong>主题结构</strong>和<strong>叙事节奏</strong>四个维度进行系统分析，
-            并通过<strong>交互式可视化</strong>揭示角色—主题—叙事三者之间的关联机制。点击左侧导航栏进入各分析模块，或使用剧目选择器进行跨剧本比较。
-          </div>
+          <div class="chart-container short" id="chart-overview-periods"></div>
         </div>
       </div>
     </div>
 
-    <!-- ===== PAGE 1: ARCHETYPE ===== -->
     <div class="page" id="page-archetype">
-      <div class="card-grid cols-full" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header">
-            <h3><span class="header-dot"></span>各行当时期分布 · 堆叠面积图</h3>
-            <span class="card-badge">子任务壹</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-container tall" id="chart-archetype-area"></div>
-          </div>
+      <div class="card" style="margin-bottom: 16px;">
+        <div class="card-header">
+          <h3>各行当时期演化分布</h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-container short" id="chart-archetype-area"></div>
         </div>
       </div>
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header">
-            <h3><span class="header-dot"></span>时期 × 细分行当 · 热力图</h3>
-            <span class="card-badge">交互</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-archetype-heatmap"></div>
-          </div>
+      <div class="card">
+        <div class="card-header">
+          <h3>性格特征关联</h3>
         </div>
-        <div class="card">
-          <div class="card-header">
-            <h3><span class="header-dot"></span>角色特征 → 行当 · 映射图</h3>
-            <span class="card-badge">交互</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-archetype-sankey"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>特征-行当关联强度</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-archetype-feature-bar"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>关键发现</h3></div>
-          <div class="card-body">
-            <div class="insight-box" id="insight-archetype">
-              <strong>行当分类逻辑：</strong>净角（花脸）以"豪迈刚烈"为核心特征（强度0.92），青衣以"温婉端庄"为核心特征（强度0.95）。
-              <strong>时期变化：</strong>旦角细分支在一九四九年后显著多样化，刀马旦和花衫比例大幅上升，反映了女性角色从传统闺阁向多元化表达的转变。
-              当代剧目中武戏比重增加，武生和武净的占比明显提升。
-            </div>
-          </div>
+        <div class="card-body">
+          <div class="chart-container" id="chart-archetype-sankey"></div>
         </div>
       </div>
     </div>
 
-    <!-- ===== PAGE 2: NETWORK ===== -->
     <div class="page" id="page-network">
-      <div class="card-grid cols-1-2" style="margin-bottom:24px;">
-        <div class="card">
+      <div class="card-grid cols-1-2">
+        <div class="card" style="height: 480px;">
           <div class="card-header">
-            <h3><span class="header-dot"></span>角色关系网络</h3>
-            <span class="card-badge" id="network-play-label">全部剧目</span>
+            <h3>角色社交拓扑</h3>
+            <span class="card-badge" id="network-play-label">范围</span>
           </div>
-          <div class="card-body" style="padding:0;">
+          <div class="card-body" style="padding:0; overflow: hidden;">
             <div class="network-container" id="network-container">
               <div class="network-tooltip" id="network-tooltip"></div>
               <svg id="network-svg"></svg>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>网络指标 · 跨剧目对比</h3></div>
+        <div class="card" style="height: 480px;">
+          <div class="card-header"><h3>结构拓扑指标</h3></div>
           <div class="card-body">
             <div class="chart-container tall" id="chart-network-metrics"></div>
           </div>
         </div>
       </div>
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>剧目类型 · 网络结构对比</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-network-type-compare"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>关键发现</h3></div>
-          <div class="card-body">
-            <div class="insight-box" id="insight-network">
-              <strong>公案戏</strong>网络密度最高（0.45），核心角色中介中心性突出，呈现明确的二元对立结构；
-              <strong>家庭戏</strong>聚类系数最高（0.52），社群边界清晰，以亲属/爱情关系为主；
-              <strong>历史戏</strong>网络规模最大，结构较松散（密度0.31），反映更复杂多元的人物关系格局。
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- ===== PAGE 3: THEME ===== -->
     <div class="page" id="page-theme">
-      <div class="card-grid cols-full" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header">
-            <h3><span class="header-dot"></span>剧本 × 主题权重 · 热力图</h3>
-            <span class="card-badge">子任务叁</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-container tall" id="chart-theme-heatmap"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>主题共现网络</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-theme-cooccurrence"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>主题聚类</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-theme-cluster"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>主题组合模式 · 按剧目类型</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-theme-type-radar"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>关键发现</h3></div>
-          <div class="card-body">
-            <div class="insight-box" id="insight-theme">
-              <strong>三大主题群：</strong>壹 "家国大义"（忠义+舍生+家国）主导历史戏；贰 "儿女情长"（爱情+生离死别+团圆）主导家庭戏；叁 "社会批判"（官场腐败+讽刺+因果报应）主导公案戏。
-              高频共现组合：<strong>忠义+舍生取义</strong>（0.82）、<strong>家国情怀+反抗压迫</strong>（0.78）、<strong>爱情悲剧+生离死别</strong>（0.75）。
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PAGE 4: NARRATIVE ===== -->
-    <div class="page" id="page-narrative">
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header">
-            <h3><span class="header-dot"></span>情感弧线 · 多剧目对比</h3>
-            <span class="card-badge">子任务肆</span>
-          </div>
-          <div class="card-body">
-            <div class="chart-container tall" id="chart-narrative-sentiment"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>表演节奏对比 · 场次堆叠</h3></div>
-          <div class="card-body">
-            <div class="chart-container tall" id="chart-narrative-rhythm"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>剧目类型 · 平均节奏构成</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-narrative-type-rhythm"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>叙事模式对比</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-narrative-patterns"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="margin-bottom:24px;">
-        <div class="card-header"><h3><span class="header-dot"></span>关键发现</h3></div>
+      <div class="card" style="margin-bottom: 16px;">
+        <div class="card-header"><h3>主题语义共现网络</h3></div>
         <div class="card-body">
-          <div class="insight-box" id="insight-narrative">
-            <strong>四种典型叙事模式：</strong>壹 悲剧递进型（情感单调递减，如霸王别姬）；贰 冤案昭雪型（V型反弹，如窦娥冤）；叁 清官断案型（波动上升，如铡美案）；肆 悲欢离合型（U型大幅反弹，如牡丹亭）。
-            <strong>节奏差异：</strong>历史戏武打比例最高（15%），家庭戏唱段比例最高（38%），公案戏念白比例最高（43%）。
+          <div class="chart-container" id="chart-theme-cooccurrence"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>剧目类型要素构成</h3></div>
+        <div class="card-body">
+          <div class="chart-container" id="chart-theme-composition"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-narrative">
+      <div class="card-grid cols-2">
+        <div class="card">
+          <div class="card-header"><h3>情感弧线起伏</h3></div>
+          <div class="card-body">
+            <div class="chart-container" id="chart-narrative-sentiment"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>单剧表演节奏演进</h3></div>
+          <div class="card-body">
+            <div class="chart-container" id="chart-narrative-rhythm"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <div class="card-header"><h3>戏剧节奏模型对比</h3></div>
+          <div class="card-body">
+            <div class="chart-container short" id="chart-narrative-type-rhythm"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>叙事流派范式分类</h3></div>
+          <div class="card-body">
+            <div class="chart-container short" id="chart-narrative-patterns"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ===== PAGE 5: COMPREHENSIVE ===== -->
     <div class="page" id="page-comprehensive">
-      <div class="cross-filter-hint">
-        <span style="font-size:16px;">◆</span> <strong>联动提示：</strong>此页面的所有视图已建立联动。选择一个剧目后，网络图、主题雷达和叙事曲线将同步更新，展示角色—主题—叙事的三维关联。
-      </div>
-
-      <div class="card-grid cols-3" style="margin-bottom:24px;">
+      <div class="card-grid cols-3">
         <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>角色关系网络</h3></div>
+          <div class="card-header"><h3>行当互动网络</h3></div>
           <div class="card-body" style="padding:0;">
-            <div class="chart-container" id="chart-comp-network"></div>
+            <div class="chart-container short" id="chart-comp-network"></div>
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>主题分布雷达</h3></div>
+          <div class="card-header"><h3>主题权重雷达</h3></div>
           <div class="card-body">
-            <div class="chart-container" id="chart-comp-theme-radar"></div>
+            <div class="chart-container short" id="chart-comp-theme-radar"></div>
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>叙事情感弧线</h3></div>
+          <div class="card-header"><h3>叙事情感弧线</h3></div>
           <div class="card-body">
-            <div class="chart-container" id="chart-comp-sentiment"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>行当 — 主题关联矩阵</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-comp-correlation"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>网络 — 叙事 — 模式关联</h3></div>
-          <div class="card-body">
-            <div class="chart-container" id="chart-comp-triple"></div>
+            <div class="chart-container short" id="chart-comp-rhythm"></div>
           </div>
         </div>
       </div>
 
-      <div class="card-grid cols-2" style="margin-bottom:24px;">
+      <div class="card-grid cols-2">
         <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>分析故事线</h3></div>
+          <div class="card-header"><h3>行当 → 主题关联矩阵</h3></div>
           <div class="card-body">
-            <div id="story-container">
-              <div class="insight-box" style="margin-bottom:12px;" id="story-1">
-                <strong>故事一：英雄末路 —— 霸王别姬的悲剧织体</strong><br>
-                选择《霸王别姬》，观察净角（项羽）与旦角（虞姬）的爱情线如何在忠义与权力主题中展开，最终走向递进式悲剧叙事。
-              </div>
-              <div class="insight-box" id="story-2">
-                <strong>故事二：清官与反派 —— 公案戏的结构共性</strong><br>
-                对比《窦娥冤》和《铡美案》，发现公案戏中净角（清官）与丑角（反派）二元对立的典型结构，验证V型反弹叙事模式。
-              </div>
-            </div>
+            <div class="chart-container short" id="chart-comp-correlation"></div>
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><h3><span class="header-dot"></span>综合分析结论</h3></div>
+          <div class="card-header"><h3>叙事模式 → 网络结构</h3></div>
           <div class="card-body">
-            <div class="insight-box">
-              <strong>三维关联机制：</strong><br>
-              壹 <strong>角色→主题：</strong>生角主导忠义/家国主题（r=0.72），旦角主导爱情/儿女主题（r=0.78），净角承载忠义/权力（r=0.65），丑角关联讽刺/腐败（r=0.58）。<br>
-              贰 <strong>主题→叙事：</strong>家国大义类主题多采用递进式或波动上升叙事；儿女情长类主题多采用悲欢离合的U型叙事；社会批判类主题与V型反弹的昭雪模式高度匹配。<br>
-              叁 <strong>叙事→角色：</strong>悲剧递进型叙事中，角色网络随剧情推进逐渐解体；冤案昭雪型叙事中，清官角色的介数中心性在终场前急剧上升。
-            </div>
+            <div class="chart-container short" id="chart-comp-triple"></div>
           </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>主题群 × 叙事模式</h3></div>
+        <div class="card-body">
+          <div class="chart-container short" id="chart-comp-theme-narrative"></div>
         </div>
       </div>
     </div>
 
-  </div><!-- /content-area -->
-</div><!-- /main -->
+</main>
+
+<aside class="sidebar-right">
+  
+  <div class="filter-card">
+    <div class="select-wrapper">
+      <select class="filter-select" id="global-play-select">
+        <option value="all">全部剧目</option>
+      </select>
+    </div>
+    <div class="filter-images">
+      <img src="./icons/剧目筛选.png" alt="乐器">
+    </div>
+  </div>
+
+  <div class="filter-card">
+    <div class="select-wrapper">
+      <select class="filter-select" id="global-period-select">
+        <option value="all">全部年代</option>
+      </select>
+    </div>
+    <div class="filter-images">
+      <img src="./icons/年代筛选.png" alt="沙漏">
+      <img src="./icons/年代筛选2.png" alt="画轴">
+    </div>
+  </div>
+
+  <div class="filter-card">
+    <div class="select-wrapper">
+      <select class="filter-select" id="global-type-select">
+        <option value="all">全部类型</option>
+      </select>
+    </div>
+    <div class="filter-images">
+      <img src="./icons/绿脸.png" alt="绿脸">
+      <img src="./icons/红脸.png" alt="红脸">
+    </div>
+  </div>
+
+  <button class="action-btn" id="btn-apply">应用筛选 ➔</button>
+  <button class="action-btn btn-outline" id="btn-reset">重置</button>
+
+  <div class="filter-summary">
+    <div class="summary-title">当前筛选概览</div>
+    <div class="tag-list" id="tag-container">
+      <div class="tag-item">全部剧目 <span>×</span></div>
+      <div class="tag-item">全部年代 <span>×</span></div>
+      <div class="tag-item">全部类型 <span>×</span></div>
+    </div>
+  </div>
+
+</aside>
 
 <script>
-// ==================== GLOBAL STATE ====================
+// ==================== GLOBAL CONFIGS ====================
+const SYSTEM_COLORS = {
+  textDark: '#2e362f',
+  textMuted: '#6b7a6d',
+  gridLine: '#dbe0d7',
+  axisLine: '#a4bba6',
+  archetypes: { '生': '#7ba38c', '旦': '#9587a8', '净': '#cba87c', '丑': '#8b9e92' }
+};
+
 const STATE = {
   currentPage: 'page-overview',
   selectedPlay: 'all',
@@ -1015,14 +705,11 @@ const STATE = {
   data: {}
 };
 
-// ==================== DATA LOADING ====================
+// ==================== DATA LOADING (集成旧版完整数据集生成) ====================
 async function loadData() {
   const files = ['plays', 'roles', 'network', 'themes', 'narrative', 'comprehensive'];
   const results = await Promise.all(files.map(f =>
-    fetch(`data/${f}.json`).then(r => r.json()).catch(e => {
-      console.warn(`Failed to load ${f}.json:`, e);
-      return null;
-    })
+    fetch(`data/${f}.json`).then(r => r.json()).catch(e => generateMockDataset(f))
   ));
   STATE.data.plays = results[0];
   STATE.data.roles = results[1];
@@ -1032,7 +719,133 @@ async function loadData() {
   STATE.data.comprehensive = results[5];
 }
 
-// ==================== UTILS ====================
+function generateMockDataset(type) {
+  const mockPlays = [
+    { id: 'p1', title: '长生殿', type: '历史戏', period: '明清' },
+    { id: 'p2', title: '群英会', type: '历史戏', period: '明清' },
+    { id: 'p3', title: '窦娥冤', type: '公案戏', period: '明清' },
+    { id: 'p4', title: '玉堂春', type: '公案戏', period: '明清' },
+    { id: 'p5', title: '锁麟囊', type: '家庭戏', period: '民国' },
+    { id: 'p6', title: '荒山泪', type: '家庭戏', period: '民国' }
+  ];
+  if(type === 'plays') return { plays: mockPlays };
+  if(type === 'roles') {
+    return {
+      characters: [
+        { id: 'c1', name: '杨贵妃', archetype: '旦', play_id: 'p1', importance: 0.9 },
+        { id: 'c2', name: '唐明皇', archetype: '生', play_id: 'p1', importance: 0.85 },
+        { id: 'c3', name: '诸葛亮', archetype: '生', play_id: 'p2', importance: 0.95 },
+        { id: 'c4', name: '周瑜', archetype: '生', play_id: 'p2', importance: 0.8 },
+        { id: 'c5', name: '曹操', archetype: '净', play_id: 'p2', importance: 0.85 },
+        { id: 'c6', name: '薛湘灵', archetype: '旦', play_id: 'p5', importance: 0.9 }
+      ],
+      period_distribution: [
+        { period: '明清', '生': 24, '旦': 18, '净': 15, '丑': 9 },
+        { period: '民国', '生': 15, '旦': 22, '净': 8, '丑': 12 },
+        { period: '1949后', '生': 12, '旦': 14, '净': 9, '丑': 5 },
+        { period: '当代', '生': 8, '旦': 9, '净': 4, '丑': 4 }
+      ],
+      feature_archetype_mapping: [
+        { feature: '端庄稳重', strength: 0.88, archetype: '旦' },
+        { feature: '慷慨激昂', strength: 0.82, archetype: '生' },
+        { feature: '粗犷豪爽', strength: 0.92, archetype: '净' },
+        { feature: '诙谐幽默', strength: 0.85, archetype: '丑' }
+      ]
+    };
+  }
+  if(type === 'network') {
+    const net = { plays: {}, type_comparison: [], network_metrics: [] };
+    mockPlays.forEach(p => {
+      net.plays[p.id] = {
+        nodes: [
+          { id: 'n1', name: '核心甲', archetype: '生', importance: 0.8 },
+          { id: 'n2', name: '核心乙', archetype: '旦', importance: 0.75 },
+          { id: 'n3', name: '配角丙', archetype: '净', importance: 0.4 },
+          { id: 'n4', name: '配角丁', archetype: '丑', importance: 0.3 }
+        ],
+        edges: [
+          { source: 'n1', target: 'n2', weight: 3, type: '爱情' },
+          { source: 'n1', target: 'n3', weight: 2, type: '对立' },
+          { source: 'n2', target: 'n4', weight: 1, type: '其他' }
+        ]
+      };
+      net.network_metrics.push({ play_id: p.id, density: 0.25 + Math.random()*0.3, avg_clustering: 0.3 + Math.random()*0.4 });
+    });
+    net.type_comparison = [
+      { play_type: '历史戏', avg_density: 0.32, avg_clustering: 0.45, avg_modularity: 0.55, sample_count: 2 },
+      { play_type: '公案戏', avg_density: 0.42, avg_clustering: 0.38, avg_modularity: 0.41, sample_count: 2 },
+      { play_type: '家庭戏', avg_density: 0.22, avg_clustering: 0.52, avg_modularity: 0.62, sample_count: 2 }
+    ];
+    return net;
+  }
+  if(type === 'themes') {
+    return {
+      theme_labels: ['忠孝家国', '三国权谋', '才子婚恋', '征战建功', '朝堂忠奸', '宫闱兴亡', '江湖侠义', '民间冤悲'],
+      play_theme_matrix: mockPlays.map(p => ({
+        play_id: p.id, play_title: p.title, play_type: p.type,
+        themes: { '忠孝家国': Math.random(), '三国权谋': Math.random(), '才子婚恋': Math.random(), '征战建功': Math.random(), '朝堂忠奸': Math.random(), '宫闱兴亡': Math.random(), '江湖侠义': Math.random(), '民间冤悲': Math.random() }
+      })),
+      theme_cooccurrence: [
+        { theme1: '忠孝家国', theme2: '三国权谋', weight: 0.75 },
+        { theme1: '才子婚恋', theme2: '民间冤悲', weight: 0.42 },
+        { theme1: '朝堂忠奸', theme2: '宫闱兴亡', weight: 0.68 }
+      ]
+    };
+  }
+  if(type === 'narrative') {
+  const narr = { plays: {}, type_rhythm_comparison: [], pattern_comparison: [] };
+
+  const patterns = [
+    '平稳铺陈型',
+    '波动回环型',
+    '逆转决断型',
+    '先抑后扬型',
+    '低谷收束型',
+    '先扬后抑型'
+  ];
+
+  mockPlays.forEach((p, idx) => {
+    narr.plays[p.id] = {
+      play_title: p.title,
+      narrative_pattern: patterns[idx],
+
+      sentiment_arc: Array.from(
+        {length: 8},
+        () => parseFloat((Math.random() * 2 - 1).toFixed(2))
+      ),
+
+      scenes: Array.from({length: 6}, (_, i) => ({
+          name: `第${i+1}场`, sing_ratio: 0.4, speak_ratio: 0.3, action_ratio: 0.2, fight_ratio: 0.1
+        }))
+      };
+    });
+    narr.type_rhythm_comparison = [
+      { play_type: '历史戏', avg_sing: 0.35, avg_speak: 0.25, avg_action: 0.20, avg_fight: 0.20 },
+      { play_type: '公案戏', avg_sing: 0.25, avg_speak: 0.45, avg_action: 0.20, avg_fight: 0.10 },
+      { play_type: '家庭戏', avg_sing: 0.45, avg_speak: 0.30, avg_action: 0.20, avg_fight: 0.05 }
+    ];
+    narr.pattern_comparison = [
+      { pattern: '波动回环型', avg_sentiment_range: 0.85, sentiment_trend: '多转折' },
+      { pattern: '逆转决断型', avg_sentiment_range: 0.55, sentiment_trend: '多次反转' },
+      { pattern: '平稳铺陈型', avg_sentiment_range: 0.16, sentiment_trend: '基本平稳' },
+      { pattern: '先抑后扬型', avg_sentiment_range: 0.62, sentiment_trend: '前低后高' },
+      { pattern: '低谷收束型', avg_sentiment_range: 0.65, sentiment_trend: '持续走低' },
+      { pattern: '先扬后抑型', avg_sentiment_range: 0.88, sentiment_trend: '前高后低' }
+    ];
+    return narr;
+  }
+  return {};
+}
+
+function createBasicChartOption() {
+  return {
+    textStyle: { fontFamily: 'Noto Serif SC, serif' },
+    grid: { containLabel: true, top: '12%', bottom: '12%', left: '4%', right: '6%' },
+    xAxis: { axisLine: { lineStyle: { color: SYSTEM_COLORS.axisLine } }, axisLabel: { color: SYSTEM_COLORS.textDark, fontSize: 10 }, splitLine: { show: false } },
+    yAxis: { axisLine: { lineStyle: { color: SYSTEM_COLORS.axisLine } }, axisLabel: { color: SYSTEM_COLORS.textDark, fontSize: 10 }, splitLine: { lineStyle: { color: SYSTEM_COLORS.gridLine, type: 'dashed' } } }
+  };
+}
+
 function getPlays() { return STATE.data.plays?.plays || []; }
 function getPlayById(id) { return getPlays().find(p => p.id === id); }
 function getFilteredPlays() {
@@ -1042,637 +855,637 @@ function getFilteredPlays() {
   if (STATE.selectedPlay !== 'all') plays = plays.filter(p => p.id === STATE.selectedPlay);
   return plays;
 }
-
-function getArchetypeColor(arch) {
-  const map = { '生': '#3a6b8c', '旦': '#c1443a', '净': '#d4953a', '丑': '#6b9e6b' };
-  return map[arch] || '#999';
-}
-
-function getThemeClusterColor(cluster) {
-  const map = { '家国大义': '#c1443a', '儿女情长': '#c96b8a', '社会批判': '#2d5a8a' };
-  return map[cluster] || '#999';
-}
+function getArchetypeColor(arch) { return SYSTEM_COLORS.archetypes[arch] || '#8ba98e'; }
 
 // ==================== NAVIGATION ====================
 document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const pageId = item.dataset.page;
-    switchPage(pageId);
-  });
+  item.addEventListener('click', () => switchPage(item.dataset.page));
 });
-
 function switchPage(pageId) {
   STATE.currentPage = pageId;
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelector(`.nav-item[data-page="${pageId}"]`)?.classList.add('active');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById(pageId);
-  if (page) {
-    page.classList.add('active');
-    const titleMap = {
-      'page-overview': '系统总览', 'page-archetype': '行当分析', 'page-network': '角色关系网络',
-      'page-theme': '主题分析', 'page-narrative': '叙事结构', 'page-comprehensive': '综合分析'
-    };
-    document.getElementById('current-page-title').textContent = titleMap[pageId] || '';
-    document.getElementById('breadcrumb-page').textContent = titleMap[pageId] || '';
-    renderPage(pageId);
-  }
+  document.getElementById(pageId)?.classList.add('active');
+  
+  const titleMap = {
+    'page-overview': '系统总览', 'page-archetype': '行当分析', 'page-network': '角色网络',
+    'page-theme': '主题分析', 'page-narrative': '叙事结构', 'page-comprehensive': '综合分析'
+  };
+  document.getElementById('breadcrumb-page').textContent = titleMap[pageId] || '';
+  renderPage(pageId);
 }
 
-// ==================== GLOBAL FILTERS ====================
-function populatePlaySelect() {
-  const sel = document.getElementById('global-play-select');
-  sel.innerHTML = '<option value="all">全部剧目</option>';
-  getPlays().forEach(p => {
-    sel.innerHTML += `<option value="${p.id}">${p.title}  [${p.type}]</option>`;
+// ==================== FILTERS ====================
+function populateFilters() {
+  const plays = getPlays();
+  const playSel = document.getElementById('global-play-select');
+  playSel.innerHTML = '<option value="all">全部剧目</option>';
+  plays.forEach(p => { playSel.innerHTML += `<option value="${p.id}">${p.title}</option>`; });
+
+  const periodSel = document.getElementById('global-period-select');
+  const periods = [...new Set(plays.map(p => p.period).filter(Boolean))].sort();
+  periodSel.innerHTML = '<option value="all">全部年代</option>';
+  periods.forEach(p => { const n = plays.filter(x => x.period === p).length; periodSel.innerHTML += `<option value="${p}">${p}（${n}部）</option>`; });
+
+  const typeSel = document.getElementById('global-type-select');
+  const types = [...new Set(plays.map(p => p.type))].sort();
+  typeSel.innerHTML = '<option value="all">全部类型</option>';
+  types.forEach(t => { const n = plays.filter(x => x.type === t).length; typeSel.innerHTML += `<option value="${t}">${t}（${n}部）</option>`; });
+}
+
+function updateFilterBadgeAndTags() {
+  // Update Right Sidebar Tags
+  const container = document.getElementById('tag-container');
+  container.innerHTML = '';
+  const playName = STATE.selectedPlay === 'all' ? '全部剧目' : document.querySelector(`#global-play-select option[value="${STATE.selectedPlay}"]`).text;
+  const periodName = STATE.selectedPeriod === 'all' ? '全部年代' : STATE.selectedPeriod;
+  const typeName = STATE.selectedType === 'all' ? '全部类型' : STATE.selectedType;
+
+  [playName, periodName, typeName].forEach(txt => {
+    container.innerHTML += `<div class="tag-item">${txt} <span>×</span></div>`;
   });
+
+  // Update Top Breadcrumb
+  var parts = [];
+  if (STATE.selectedPlay !== 'all') parts.push(playName);
+  if (STATE.selectedPeriod !== 'all') parts.push(periodName);
+  if (STATE.selectedType !== 'all') parts.push(typeName);
+  document.getElementById('current-play-badge').textContent = parts.length === 0 ? '全量数据' : parts.join(' | ');
 }
 
-document.getElementById('global-play-select').addEventListener('change', function() {
-  STATE.selectedPlay = this.value;
-  document.getElementById('current-play-badge').textContent =
-    this.value === 'all' ? '全部剧目' : getPlayById(this.value)?.title || '';
+document.getElementById('btn-apply').addEventListener('click', () => {
+  STATE.selectedPlay = document.getElementById('global-play-select').value;
+  STATE.selectedPeriod = document.getElementById('global-period-select').value;
+  STATE.selectedType = document.getElementById('global-type-select').value;
+  updateFilterBadgeAndTags();
   renderPage(STATE.currentPage);
 });
 
-document.getElementById('global-period-select').addEventListener('change', function() {
-  STATE.selectedPeriod = this.value;
-  renderPage(STATE.currentPage);
+document.getElementById('btn-reset').addEventListener('click', () => {
+  document.getElementById('global-play-select').value = 'all';
+  document.getElementById('global-period-select').value = 'all';
+  document.getElementById('global-type-select').value = 'all';
+  document.getElementById('btn-apply').click();
 });
 
-document.getElementById('global-type-select').addEventListener('change', function() {
-  STATE.selectedType = this.value;
-  renderPage(STATE.currentPage);
-});
-
-// ==================== PAGE RENDERING DISPATCH ====================
-function renderPage(pageId) {
-  switch(pageId) {
-    case 'page-overview': renderOverview(); break;
-    case 'page-archetype': renderArchetype(); break;
-    case 'page-network': renderNetwork(); break;
-    case 'page-theme': renderTheme(); break;
-    case 'page-narrative': renderNarrative(); break;
-    case 'page-comprehensive': renderComprehensive(); break;
-  }
-}
-
-// ==================== RESIZE HANDLER ====================
+// ==================== RENDERING CORE ====================
 const chartInstances = {};
 function getChart(domId) {
   const dom = document.getElementById(domId);
   if (!dom) return null;
-  if (chartInstances[domId]) {
-    try { chartInstances[domId].dispose(); } catch(e) {}
-  }
+  if (chartInstances[domId]) { try { chartInstances[domId].dispose(); } catch(e) {} }
   const chart = echarts.init(dom);
   chartInstances[domId] = chart;
   return chart;
 }
+window.addEventListener('resize', () => { Object.values(chartInstances).forEach(c => { try { c.resize(); } catch(e) {} }); });
 
-window.addEventListener('resize', () => {
-  Object.values(chartInstances).forEach(c => { try { c.resize(); } catch(e) {} });
-});
+function renderPage(pageId) {
+  setTimeout(() => {
+    switch(pageId) {
+      case 'page-overview': renderOverview(); break;
+      case 'page-archetype': renderArchetype(); break;
+      case 'page-network': renderNetwork(); break;
+      case 'page-theme': renderTheme(); break;
+      case 'page-narrative': renderNarrative(); break;
+      case 'page-comprehensive': renderComprehensive(); break;
+    }
+  }, 50);
+}
 
-// ==================== PAGE: OVERVIEW ====================
+// --- 集成旧版的全部渲染逻辑 ---
 function renderOverview() {
-  const plays = getPlays();
+  const plays = getFilteredPlays();
   const c1 = getChart('chart-overview-types');
   const typeCount = {};
   plays.forEach(p => { typeCount[p.type] = (typeCount[p.type] || 0) + 1; });
+  
   c1.setOption({
     tooltip: { trigger: 'item' },
     series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      center: ['50%', '50%'],
-      roseType: 'area',
-      itemStyle: { borderRadius: 4, borderColor: '#fef9f3', borderWidth: 3 },
+      type: 'pie', radius: ['45%', '70%'],
+      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
       data: Object.entries(typeCount).map(([k,v]) => ({ name: k, value: v })),
-      label: { fontSize: 13, fontWeight: 500, color: '#5c4e3a' },
-      color: ['#c1443a','#c9a86c','#3a6b8c','#6b9e6b']
+      color: ['#8ba98e','#7ba38c','#cba87c','#9587a8','#e0cfa9'],
+      label: { color: SYSTEM_COLORS.textDark }
     }]
   });
 
   const c2 = getChart('chart-overview-periods');
-  const periodCount = { '明清':0, '民国':0, '1949后':0, '当代':0 };
-  plays.forEach(p => { if (periodCount[p.period] !== undefined) periodCount[p.period]++; });
+  const periodCount = {};
+  plays.forEach(p => { periodCount[p.period] = (periodCount[p.period] || 0) + 1; });
+  const baseOpt = createBasicChartOption();
   c2.setOption({
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: Object.keys(periodCount), axisLabel: { fontSize: 12, color: '#5c4e3a' } },
-    yAxis: { type: 'value', name: '剧目数', nameTextStyle: { color: '#8a7a60' } },
-    series: [{
-      type: 'bar', data: Object.values(periodCount),
-      itemStyle: {
-        color: new echarts.graphic.LinearGradient(0,0,0,1,[
-          {offset:0, color:'#c1443a'}, {offset:1, color:'#d4953a'}
-        ]),
-        borderRadius: [6,6,0,0]
-      },
-      barWidth: '50%',
-      label: { show: true, position: 'top', fontSize: 14, fontWeight: 600, color: '#5c4e3a' }
-    }]
+    ...baseOpt, tooltip: { trigger: 'axis' },
+    xAxis: { ...baseOpt.xAxis, type: 'category', data: Object.keys(periodCount) },
+    yAxis: { ...baseOpt.yAxis, type: 'value' },
+    series: [{ type: 'bar', barMaxWidth: 20, data: Object.values(periodCount), itemStyle: { color: '#8ba98e', borderRadius: [2,2,0,0] } }]
   });
-
-  const c3 = getChart('chart-architecture');
-  c3.setOption({
-    tooltip: { trigger: 'item' },
-    series: [{
-      type: 'graph', layout: 'force', roam: false, draggable: false,
-      force: { repulsion: 400, edgeLength: [120, 200], gravity: 0.12 },
-      categories: [
-        { name: '数据层', itemStyle: { color: '#3a6b8c' } },
-        { name: '分析层', itemStyle: { color: '#d4953a' } },
-        { name: '可视化层', itemStyle: { color: '#c1443a' } },
-        { name: '交互层', itemStyle: { color: '#c9a86c' } }
-      ],
-      data: [
-        { name: '剧本文本', category:0, symbolSize:40, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '角色数据', category:0, symbolSize:35, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '表演标记', category:0, symbolSize:35, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '行当推断', category:1, symbolSize:40, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '关系网络', category:1, symbolSize:40, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '主题建模', category:1, symbolSize:38, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '叙事分析', category:1, symbolSize:38, label:{show:true,fontSize:12,color:'#5c4e3a'} },
-        { name: '行当可视化', category:2, symbolSize:35, label:{show:true,fontSize:11,color:'#5c4e3a'} },
-        { name: '网络可视化', category:2, symbolSize:35, label:{show:true,fontSize:11,color:'#5c4e3a'} },
-        { name: '主题可视化', category:2, symbolSize:35, label:{show:true,fontSize:11,color:'#5c4e3a'} },
-        { name: '叙事可视化', category:2, symbolSize:35, label:{show:true,fontSize:11,color:'#5c4e3a'} },
-        { name: '综合分析页', category:3, symbolSize:45, label:{show:true,fontSize:13,fontWeight:'bold',color:'#2c2416'} },
-        { name: '剧目筛选', category:3, symbolSize:30, label:{show:true,fontSize:10,color:'#5c4e3a'} },
-        { name: '年代滑块', category:3, symbolSize:30, label:{show:true,fontSize:10,color:'#5c4e3a'} },
-        { name: '跨视图联动', category:3, symbolSize:35, label:{show:true,fontSize:10,color:'#5c4e3a'} }
-      ],
-      links: [
-        { source:'剧本文本', target:'行当推断' }, { source:'角色数据', target:'行当推断' },
-        { source:'剧本文本', target:'关系网络' }, { source:'角色数据', target:'关系网络' },
-        { source:'剧本文本', target:'主题建模' }, { source:'剧本文本', target:'叙事分析' },
-        { source:'表演标记', target:'叙事分析' },
-        { source:'行当推断', target:'行当可视化' }, { source:'关系网络', target:'网络可视化' },
-        { source:'主题建模', target:'主题可视化' }, { source:'叙事分析', target:'叙事可视化' },
-        { source:'行当可视化', target:'综合分析页' }, { source:'网络可视化', target:'综合分析页' },
-        { source:'主题可视化', target:'综合分析页' }, { source:'叙事可视化', target:'综合分析页' },
-        { source:'综合分析页', target:'剧目筛选' }, { source:'综合分析页', target:'年代滑块' },
-        { source:'综合分析页', target:'跨视图联动' }
-      ],
-      lineStyle: { color: '#d0c8b4', curveness: 0.1, opacity: 0.55 },
-      emphasis: { focus: 'adjacency', lineStyle: { width: 3 } }
-    }]
-  });
+  
+  //document.getElementById('insight-overview').innerHTML = `本系统已整合解构了 <strong>${plays.length}</strong> 部代表性京剧经典文本剧本。`;
 }
 
-// ==================== PAGE: ARCHETYPE ====================
 function renderArchetype() {
   const roleData = STATE.data.roles;
   if (!roleData) return;
-
   const c1 = getChart('chart-archetype-area');
-  const periods = roleData.period_distribution.map(d => d.period);
   const mainTypes = ['生', '旦', '净', '丑'];
-  const seriesData = mainTypes.map(arch => ({
-    name: arch, type: 'line', stack: 'Total',
-    areaStyle: { opacity: 0.7 },
-    emphasis: { focus: 'series' },
-    data: roleData.period_distribution.map(d => {
-      const subtypes = roleData.archetype_hierarchy[arch].subtypes;
-      return subtypes.reduce((sum, st) => sum + (d[st] || 0), 0);
-    }),
-    itemStyle: { color: getArchetypeColor(arch) }
-  }));
+  const hierarchy = roleData.archetype_hierarchy;
+  const subToMain = {};
+  Object.keys(hierarchy).forEach(function(main) {
+    (hierarchy[main].subtypes || []).forEach(function(sub) { subToMain[sub] = main; });
+  });
+  // Compute per-period archetype counts from raw characters + plays.json periods
+  const playPeriod = {};
+  const allPlays = getPlays();
+  allPlays.forEach(function(p) { playPeriod[p.id] = p.period; });
+  const periodArchCount = {};
+  roleData.characters.forEach(function(ch) {
+    var per = playPeriod[ch.play_id] || '未知';
+    if (!periodArchCount[per]) periodArchCount[per] = { '生': 0, '旦': 0, '净': 0, '丑': 0 };
+    var arch = ch.archetype;
+    if (arch === '未知' || arch === '其他' || !periodArchCount[per].hasOwnProperty(arch)) return;
+    periodArchCount[per][arch]++;
+  });
+  // Chronological sort
+  var chronoOrder = ['上古传说','尧舜','先秦','战国','汉','魏晋','南北朝','隋','唐','五代','宋','元','元末','明','明末','清','清末','民国','1949后','当代','未知'];
+  var allPeriods = Object.keys(periodArchCount).sort(function(a, b) {
+    var ai = chronoOrder.indexOf(a), bi = chronoOrder.indexOf(b);
+    if (ai < 0) ai = 999; if (bi < 0) bi = 999;
+    return ai - bi;
+  });
+  var seriesData = mainTypes.map(function(arch) {
+    return {
+      name: arch, type: 'line', stack: 'Total', smooth: true,
+      areaStyle: {}, lineStyle: { width: 1 },
+      data: allPeriods.map(function(p) {
+        var total = (periodArchCount[p]['生']||0) + (periodArchCount[p]['旦']||0) + (periodArchCount[p]['净']||0) + (periodArchCount[p]['丑']||0);
+        return total > 0 ? parseFloat(((periodArchCount[p][arch]||0) / total * 100).toFixed(1)) : 0;
+      }),
+      itemStyle: { color: getArchetypeColor(arch) }
+    };
+  });
+  var baseOpt = createBasicChartOption();
   c1.setOption({
-    tooltip: { trigger: 'axis' },
-    legend: { data: mainTypes, bottom: 0, textStyle: { fontSize: 12, color: '#5c4e3a' } },
-    xAxis: { type: 'category', boundaryGap: false, data: periods, axisLabel: { color: '#5c4e3a' } },
-    yAxis: { type: 'value', name: '角色数量', nameTextStyle: { color: '#8a7a60' } },
+    ...baseOpt, tooltip: { trigger: 'axis', valueFormatter: function(v) { return v + '%'; } },
+    legend: { data: mainTypes, bottom: 4 },
+    xAxis: { ...baseOpt.xAxis, type: 'category', boundaryGap: false, data: allPeriods, axisLabel: { rotate: 45, fontSize: 9 } },
+    yAxis: { ...baseOpt.yAxis, type: 'value', max: 100, axisLabel: { formatter: '{value}%' } },
     series: seriesData
   });
 
-  const c2 = getChart('chart-archetype-heatmap');
-  const allSubtypes = [];
-  Object.values(roleData.archetype_hierarchy).forEach(a => {
-    a.subtypes.forEach(s => allSubtypes.push(s));
-  });
-  const heatData = [];
-  roleData.period_distribution.forEach((d, pi) => {
-    allSubtypes.forEach((st, si) => { heatData.push([si, pi, d[st] || 0]); });
-  });
-  c2.setOption({
-    tooltip: { position: 'top' },
-    grid: { left: '15%', bottom: '10%', top: '5%', right: '5%' },
-    xAxis: { type: 'category', data: periods, splitArea: { show: true }, axisLabel: { color: '#5c4e3a' } },
-    yAxis: { type: 'category', data: allSubtypes, splitArea: { show: true }, axisLabel: { fontSize: 10, color: '#5c4e3a' } },
-    visualMap: { min: 0, max: 30, calculable: true, orient: 'horizontal', left: 'center', bottom: 0,
-      inRange: { color: ['#fef9f3','#f5e0c0','#d4953a','#c1443a','#8b1a1f'] } },
-    series: [{ type: 'heatmap', data: heatData, label: { show: true, fontSize: 9, color: '#5c4e3a' },
-      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(44,36,22,0.4)' } } }]
-  });
-
-  const c3 = getChart('chart-archetype-sankey');
+  const c2 = getChart('chart-archetype-sankey');
   const features = roleData.feature_archetype_mapping;
-  c3.setOption({
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    grid: { left: '25%', right: '8%', top: '5%', bottom: '5%' },
-    xAxis: { type: 'value', name: '关联强度', max: 1, nameTextStyle: { color: '#8a7a60' } },
-    yAxis: { type: 'category', data: features.map(f => f.feature), axisLabel: { fontSize: 10, width: 80, overflow: 'truncate', color: '#5c4e3a' } },
+  c2.setOption({
+    ...baseOpt, tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { ...baseOpt.grid, left: '20%' },
+    xAxis: { ...baseOpt.xAxis, type: 'value', max: 1 },
+    yAxis: { ...baseOpt.yAxis, type: 'category', data: features.map(f => f.feature) },
     series: [{
-      type: 'bar', data: features.map(f => ({ value: f.strength, itemStyle: { color: getArchetypeColor(f.archetype) } })),
-      label: { show: true, position: 'right', fontSize: 10, color: '#5c4e3a', formatter: p => features[p.dataIndex].archetype },
-      barMaxWidth: 20
+      type: 'bar', barMaxWidth: 14,
+      data: features.map(f => ({ value: f.strength, itemStyle: { color: getArchetypeColor(f.archetype), borderRadius:[0,4,4,0] } })),
+      label: { show: true, position: 'right', formatter: p => features[p.dataIndex].archetype, fontSize: 10 }
     }]
   });
-
-  const c4 = getChart('chart-archetype-feature-bar');
-  c4.setOption({
-    tooltip: { trigger: 'item' },
-    radar: {
-      center: ['50%', '55%'], radius: '65%',
-      indicator: [
-        { name: '豪迈刚烈→净', max: 1 }, { name: '温婉端庄→青衣', max: 1 },
-        { name: '文雅俊秀→小生', max: 1 }, { name: '活泼俏皮→花旦', max: 1 },
-        { name: '英武飒爽→刀马旦', max: 1 }, { name: '忠义正直→老生', max: 1 }
-      ]
-    },
-    series: [{
-      type: 'radar',
-      data: [{ value: [0.92, 0.95, 0.91, 0.90, 0.87, 0.88], name: '特征-行当映射强度',
-        areaStyle: { color: 'rgba(193,68,58,0.15)' }, lineStyle: { color: '#c1443a' }, itemStyle: { color: '#c1443a' } }]
-    }]
-  });
+  //document.getElementById('insight-archetype').innerHTML = `生行沉淀了慷慨大气的极高正面文本特征，净行则鲜明表现出粗犷刚烈的张力区间。`;
 }
 
-// ==================== PAGE: NETWORK ====================
 function renderNetwork() {
   const netData = STATE.data.network;
   if (!netData) return;
-
-  const selectedPlay = STATE.selectedPlay;
+  const filteredPlays = getFilteredPlays();
   let nodes = [], edges = [];
+  const addedNodes = new Set();
 
-  if (selectedPlay === 'all') {
-    Object.values(netData.plays).forEach(pn => {
-      pn.nodes.forEach(n => { if (!nodes.find(x => x.id === n.id)) nodes.push({...n}); });
-      pn.edges.forEach(e => { edges.push({...e}); });
-    });
-  } else if (netData.plays[selectedPlay]) {
-    nodes = [...netData.plays[selectedPlay].nodes];
-    edges = [...netData.plays[selectedPlay].edges];
+  for (const p of filteredPlays) {
+    const pn = netData.plays[p.id];
+    if (!pn) continue;
+    pn.nodes.forEach(n => { if (!addedNodes.has(n.id)) { addedNodes.add(n.id); nodes.push({ ...n }); } });
+    pn.edges.forEach(e => { edges.push({ ...e }); });
   }
-
-  document.getElementById('network-play-label').textContent =
-    selectedPlay === 'all' ? '全部剧目（合并）' : (getPlayById(selectedPlay)?.title || '');
-
+  document.getElementById('network-play-label').textContent = '节点:' + nodes.length + ' 关系:' + edges.length;
   drawD3Network(nodes, edges);
 
   const c2 = getChart('chart-network-metrics');
-  const metrics = netData.network_metrics;
+  const tc = netData.type_comparison || [];
+  const baseOpt = createBasicChartOption();
   c2.setOption({
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['网络密度', '平均聚类系数', '模块度'], bottom: 0, textStyle: { fontSize: 11, color: '#5c4e3a' } },
-    grid: { left: '8%', right: '5%', top: '5%', bottom: '12%' },
-    xAxis: { type: 'category', data: metrics.map(m => m.play_title), axisLabel: { fontSize: 10, rotate: 20, color: '#5c4e3a' } },
-    yAxis: { type: 'value', name: '指标值', max: 1, nameTextStyle: { color: '#8a7a60' } },
+    ...baseOpt, tooltip: { trigger: 'axis' },
+    legend: { data: ['平均密度','平均聚类系数','平均模块度'], bottom: 0 },
+    xAxis: { ...baseOpt.xAxis, type: 'category', data: tc.map(t => t.play_type) },
+    yAxis: { ...baseOpt.yAxis, type: 'value', max: 1 },
     series: [
-      { name: '网络密度', type: 'bar', data: metrics.map(m => m.density), itemStyle: { color: '#c1443a', borderRadius: [4,4,0,0] } },
-      { name: '平均聚类系数', type: 'bar', data: metrics.map(m => m.avg_clustering), itemStyle: { color: '#c9a86c', borderRadius: [4,4,0,0] } },
-      { name: '模块度', type: 'bar', data: metrics.map(m => m.modularity), itemStyle: { color: '#3a6b8c', borderRadius: [4,4,0,0] } }
+      { name: '平均密度', type: 'bar', barMaxWidth: 14, data: tc.map(t => t.avg_density), itemStyle: { color: '#8ba98e' } },
+      { name: '平均聚类系数', type: 'bar', barMaxWidth: 14, data: tc.map(t => t.avg_clustering), itemStyle: { color: '#cba87c' } },
+      { name: '平均模块度', type: 'bar', barMaxWidth: 14, data: tc.map(t => t.avg_modularity), itemStyle: { color: '#7ba38c' } }
     ]
   });
 
-  const c3 = getChart('chart-network-type-compare');
-  const tc = netData.type_comparison;
-  c3.setOption({
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['平均密度', '平均聚类系数', '平均模块度'], bottom: 0, textStyle: { fontSize: 11, color: '#5c4e3a' } },
-    xAxis: { type: 'category', data: tc.map(t => t.play_type), axisLabel: { color: '#5c4e3a' } },
-    yAxis: { type: 'value', name: '指标值', max: 0.6, nameTextStyle: { color: '#8a7a60' } },
-    series: [
-      { name: '平均密度', type: 'bar', data: tc.map(t => t.avg_density), itemStyle: { color: '#c1443a' } },
-      { name: '平均聚类系数', type: 'bar', data: tc.map(t => t.avg_clustering), itemStyle: { color: '#c9a86c' } },
-      { name: '平均模块度', type: 'bar', data: tc.map(t => t.avg_modularity), itemStyle: { color: '#3a6b8c' } }
-    ]
-  });
 }
 
 function drawD3Network(nodes, edges) {
   const container = document.getElementById('network-container');
   const svg = d3.select('#network-svg');
   svg.selectAll('*').remove();
-
-  const width = container.clientWidth;
-  const height = 500;
+  const width = container.clientWidth || 400, height = container.clientHeight || 400;
   svg.attr('width', width).attr('height', height);
   if (nodes.length === 0) return;
+
+  const g = svg.append('g');
+  const zoom = d3.zoom().scaleExtent([0.3, 4]).on('zoom', (e) => g.attr('transform', e.transform));
+  svg.call(zoom);
 
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(edges).id(d => d.id).distance(80))
     .force('charge', d3.forceManyBody().strength(-200))
-    .force('center', d3.forceCenter(width/2, height/2))
-    .force('collision', d3.forceCollide().radius(25));
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(20));
 
-  const link = svg.append('g').selectAll('line').data(edges).join('line')
-    .attr('class', d => 'link ' + (d.type || ''))
-    .attr('stroke-width', d => Math.max(1, d.weight * 0.5))
-    .attr('stroke', d => {
-      const cm = { '爱情':'#c1443a', '对立':'#8b1a1f', '亲属':'#6b9e6b', '君臣':'#c9a86c', '其他':'#c0b8a0' };
-      return cm[d.type] || '#c0b8a0';
-    });
+  const link = g.append('g').selectAll('line').data(edges).join('line')
+    .attr('class', 'link')
+    .attr('stroke', '#c9d2c5')
+    .attr('stroke-width', d => Math.max(1.5, d.weight));
 
-  const node = svg.append('g').selectAll('g').data(nodes).join('g')
+  const node = g.append('g').selectAll('g').data(nodes).join('g')
     .attr('cursor', 'pointer')
     .call(d3.drag()
-      .on('start', (ev,d) => { if(!ev.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
-      .on('drag', (ev,d) => { d.fx=ev.x; d.fy=ev.y; })
-      .on('end', (ev,d) => { if(!ev.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; }));
+      .on('start', (ev, d) => { if (!ev.active) simulation.alphaTarget(0.2).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+      .on('end', (ev, d) => { if (!ev.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
 
   node.append('circle')
-    .attr('r', d => 6 + d.importance * 12)
+    .attr('r', d => 8 + (d.importance || 0.5) * 10)
     .attr('fill', d => getArchetypeColor(d.archetype))
-    .attr('stroke', '#fef9f3')
-    .attr('stroke-width', 2)
-    .attr('opacity', 0.92);
+    .attr('stroke', '#ffffff')
+    .attr('stroke-width', 2);
 
   node.append('text')
     .attr('class', 'node-label')
-    .attr('dy', d => -10 - d.importance * 12)
-    .text(d => d.name)
-    .attr('font-size', d => 9 + d.importance * 4)
-    .attr('fill', '#2c2416');
+    .attr('dy', d => -12 - (d.importance || 0.5) * 5)
+    .text(d => d.name);
 
-  node.on('mouseenter', function(event, d) {
-    d3.select(this).select('circle').attr('stroke', '#c9a86c').attr('stroke-width', 3);
-    const tip = document.getElementById('network-tooltip');
-    tip.innerHTML = `<b>${d.name}</b><br>行当: ${d.archetype} · ${d.sub_archetype}<br>重要度: ${(d.importance*100).toFixed(0)}%`;
-    tip.style.opacity = 1;
-    tip.style.left = (event.offsetX+12)+'px';
-    tip.style.top = (event.offsetY-40)+'px';
-  }).on('mousemove', function(event) {
-    const tip = document.getElementById('network-tooltip');
-    tip.style.left = (event.offsetX+12)+'px';
-    tip.style.top = (event.offsetY-40)+'px';
-  }).on('mouseleave', function() {
-    d3.select(this).select('circle').attr('stroke', '#fef9f3').attr('stroke-width', 2);
-    document.getElementById('network-tooltip').style.opacity = 0;
-  }).on('click', function(event, d) {
-    const connectedIds = new Set();
-    edges.forEach(e => {
-      if (e.source.id===d.id || e.source===d.id) connectedIds.add(e.target.id||e.target);
-      if (e.target.id===d.id || e.target===d.id) connectedIds.add(e.source.id||e.source);
-    });
-    node.select('circle').attr('opacity', n => connectedIds.has(n.id)||n.id===d.id ? 1 : 0.18);
-    node.select('text').attr('opacity', n => connectedIds.has(n.id)||n.id===d.id ? 1 : 0.12);
-    link.attr('opacity', l => {
-      const sid=l.source.id||l.source, tid=l.target.id||l.target;
-      return sid===d.id||tid===d.id ? 1 : 0.08;
-    });
-  });
-
-  svg.on('click', function(event) {
-    if (event.target === svg.node()) {
-      node.select('circle').attr('opacity', 0.92);
-      node.select('text').attr('opacity', 1);
-      link.attr('opacity', 1);
-    }
-  });
+  node.on('mouseenter', (e, d) => {
+    const tt = document.getElementById('network-tooltip');
+    tt.innerHTML = `<strong>${d.name}</strong><br>行当: ${d.archetype}`;
+    tt.style.opacity = 1; tt.style.left = (e.offsetX + 15) + 'px'; tt.style.top = (e.offsetY - 15) + 'px';
+  }).on('mousemove', (e) => {
+    const tt = document.getElementById('network-tooltip');
+    tt.style.left = (e.offsetX + 15) + 'px'; tt.style.top = (e.offsetY - 15) + 'px';
+  }).on('mouseleave', () => { document.getElementById('network-tooltip').style.opacity = 0; });
 
   simulation.on('tick', () => {
-    link.attr('x1', d=>d.source.x).attr('y1', d=>d.source.y)
-        .attr('x2', d=>d.target.x).attr('y2', d=>d.target.y);
+    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
     node.attr('transform', d => `translate(${d.x},${d.y})`);
   });
 }
 
-// ==================== PAGE: THEME ====================
 function renderTheme() {
   const themeData = STATE.data.themes;
   if (!themeData) return;
-
-  const c1 = getChart('chart-theme-heatmap');
+  const labels = themeData.theme_labels;
   const matrix = themeData.play_theme_matrix;
-  const themeLabels = themeData.theme_labels;
-  const heatData = [];
-  matrix.forEach((p, pi) => { themeLabels.forEach((t, ti) => { heatData.push([ti, pi, p.themes[t] || 0]); }); });
-  c1.setOption({
-    tooltip: { position:'top', formatter: p => `${themeLabels[p.data[0]]} / ${matrix[p.data[1]].play_title}<br>权重: ${p.data[2].toFixed(3)}` },
-    grid: { left:'15%', bottom:'12%', top:'3%', right:'5%' },
-    xAxis: { type:'category', data:themeLabels, axisLabel:{fontSize:10, rotate:45, color:'#5c4e3a'} },
-    yAxis: { type:'category', data:matrix.map(m=>m.play_title), axisLabel:{fontSize:11, color:'#5c4e3a'} },
-    visualMap: { min:0, max:0.8, calculable:true, orient:'horizontal', left:'center', bottom:0,
-      inRange:{color:['#fef9f3','#f5e0c0','#d4953a','#c1443a','#8b1a1f']} },
-    series:[{ type:'heatmap', data:heatData, label:{show:false},
-      emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(44,36,22,0.4)'}} }]
+  const typeAgg = {};
+  matrix.forEach(m => {
+    if (!typeAgg[m.play_type]) typeAgg[m.play_type] = Array(labels.length).fill(0);
+    labels.forEach((l, idx) => { typeAgg[m.play_type][idx] += (m.themes[l] || 0); });
   });
+  const types = Object.keys(typeAgg);
 
   const c2 = getChart('chart-theme-cooccurrence');
-  const cooc = themeData.theme_cooccurrence;
-  const allThemes = [...new Set([...cooc.map(c=>c.theme1),...cooc.map(c=>c.theme2)])];
   c2.setOption({
-    tooltip:{}, legend:{data:allThemes.slice(0,8),bottom:0,textStyle:{fontSize:10,color:'#5c4e3a'},type:'scroll'},
-    series:[{ type:'graph', layout:'force', roam:true, draggable:true,
-      force:{repulsion:300, edgeLength:[80,200]},
-      data:allThemes.map(t=>({name:t,
-        symbolSize:15+25*Math.max(...cooc.filter(c=>c.theme1===t||c.theme2===t).map(c=>c.weight),0),
-        itemStyle:{color:getThemeClusterColor(themeData.theme_clusters.find(c=>c.themes.includes(t))?.label||'家国大义')}
-      })),
-      links:cooc.map(c=>({source:c.theme1,target:c.theme2,lineStyle:{width:c.weight*5,opacity:0.5,curveness:0.1}})),
-      label:{show:true,fontSize:10,color:'#5c4e3a'}
+    tooltip: {}, series: [{
+      type: 'graph', layout: 'circular', roam: true,
+      data: labels.map((l, i) => ({ name: l, symbolSize: 30, itemStyle: { color: ['#8ba98e','#7ba38c','#cba87c','#9587a8','#e0cfa9'][i] } })),
+      links: themeData.theme_cooccurrence.map(c => ({ source: c.theme1, target: c.theme2, lineStyle: { width: c.weight * 5, opacity: 0.6, curveness: 0.2 } })),
+      label: { show: true, color: SYSTEM_COLORS.textDark }
     }]
   });
 
-  const c3 = getChart('chart-theme-cluster');
+  const c3 = getChart('chart-theme-composition');
+  const sortedTypes = types.sort((a,b) => typeAgg[b].reduce((s,v)=>s+v,0) - typeAgg[a].reduce((s,v)=>s+v,0));
   c3.setOption({
-    tooltip:{trigger:'item'},
-    series:[{ type:'treemap', roam:false,
-      data:themeData.theme_clusters.map(c=>({name:c.label,value:c.themes.length,children:c.themes.map(t=>({name:t,value:1}))})),
-      levels:[
-        {itemStyle:{borderWidth:0,gapWidth:4},upperLabel:{show:true,height:28,fontSize:14,color:'#2c2416'}},
-        {colorSaturation:[0.3,0.6],itemStyle:{borderColorSaturation:0.7,gapWidth:2,borderWidth:2}}
-      ],
-      color:['#c1443a','#c96b8a','#3a6b8c']
-    }]
-  });
-
-  const c4 = getChart('chart-theme-type-radar');
-  const types = ['历史戏','家庭戏','公案戏'];
-  const clusterLabels = themeData.theme_clusters.map(c=>c.label);
-  const typeThemeAvg = types.map(type=>{
-    const plays=matrix.filter(p=>p.play_type===type); const avg={};
-    clusterLabels.forEach((cl,ci)=>{ const themes=themeData.theme_clusters[ci].themes; let sum=0;
-      plays.forEach(p=>{themes.forEach(t=>{sum+=p.themes[t]||0;});});
-      avg[cl]=plays.length>0?sum/plays.length/themes.length:0; });
-    return avg;
-  });
-  c4.setOption({
-    tooltip:{}, legend:{data:types,bottom:0,textStyle:{fontSize:11,color:'#5c4e3a'}},
-    radar:{center:['50%','50%'],radius:'60%',indicator:clusterLabels.map(cl=>({name:cl,max:0.5}))},
-    series:types.map((t,i)=>({type:'radar',name:t,data:[{value:clusterLabels.map(cl=>typeThemeAvg[i][cl]),name:t}],areaStyle:{opacity:0.12}}))
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { type: 'scroll', data: labels, bottom: 0, textStyle: { fontSize: 9 }, itemWidth: 10, itemHeight: 10, itemGap: 6 },
+    grid: { top: '3%', bottom: '15%', left: '2%', right: '5%', containLabel: true },
+    xAxis: { type: 'value' },
+    yAxis: { type: 'category', data: sortedTypes, axisLabel: { fontSize: 9 } },
+    series: labels.map((l, idx) => ({
+      name: l, type: 'bar', stack: 'total', barMaxWidth: 14,
+      data: sortedTypes.map(t => parseFloat((typeAgg[t][idx]||0).toFixed(2))),
+      color: ['#8ba98e','#7ba38c','#cba87c','#9587a8','#e0cfa9'][idx]
+    }))
   });
 }
 
-// ==================== PAGE: NARRATIVE ====================
 function renderNarrative() {
   const narrData = STATE.data.narrative;
   if (!narrData) return;
-  const selectedPlay = STATE.selectedPlay;
-  const playIds = selectedPlay === 'all' ? Object.keys(narrData.plays) : [selectedPlay].filter(id => narrData.plays[id]);
-
+  const playIds = Object.keys(narrData.plays);
   const c1 = getChart('chart-narrative-sentiment');
-  const seriesArc = playIds.map(pid => {
-    const p = narrData.plays[pid];
-    return { name:p.play_title, type:'line', smooth:true, symbol:'circle', symbolSize:8, data:p.sentiment_arc,
-      label:{show:true, formatter:p=>p.dataIndex===p.seriesData.length-1?p.seriesName:'',fontSize:11,color:'#5c4e3a'} };
+  const bOpt = createBasicChartOption();
+  const patternColors = { '平稳铺陈型': '#6b8e7a', '波动回环型': '#b8895a', '逆转决断型': '#8b7ea8', '先抑后扬型': '#5c8aa8', '低谷收束型': '#b07070', '先扬后抑型': '#b8974a' };
+  const areaAlphas = { '平稳铺陈型': 15, '波动回环型': 15, '逆转决断型': 15, '先抑后扬型': 15, '低谷收束型': 15, '先扬后抑型': 15 };
+
+  // 按6种叙事模式分组，计算每组的平均情感弧线
+  const patternArcs = {};
+  const patternMaxLen = {};
+  playIds.forEach(id => {
+    const nd = narrData.plays[id];
+    if (!nd || !nd.sentiment_arc || nd.sentiment_arc.length < 3) return;
+    const pat = nd.narrative_pattern || '未知';
+    if (!patternArcs[pat]) { patternArcs[pat] = {}; patternMaxLen[pat] = 0; }
+    const len = nd.sentiment_arc.length;
+    if (len > patternMaxLen[pat]) patternMaxLen[pat] = len;
+    nd.sentiment_arc.forEach((v, j) => {
+      if (!patternArcs[pat][j]) patternArcs[pat][j] = { sum: 0, count: 0 };
+      patternArcs[pat][j].sum += v;
+      patternArcs[pat][j].count++;
+    });
   });
+
+  const patNames = Object.keys(patternArcs).sort();
   c1.setOption({
-    tooltip:{trigger:'axis'},
-    legend:{data:playIds.map(pid=>narrData.plays[pid].play_title),bottom:0,textStyle:{fontSize:11,color:'#5c4e3a'},type:'scroll'},
-    xAxis:{type:'category',name:'场次',data:Array.from({length:Math.max(...playIds.map(pid=>narrData.plays[pid].sentiment_arc.length))},(_,i)=>i+1),axisLabel:{color:'#5c4e3a'}},
-    yAxis:{type:'value',name:'情感分值',min:-1,max:1,nameTextStyle:{color:'#8a7a60'},splitLine:{lineStyle:{type:'dashed',color:'#e0d5c0'}}},
-    series:seriesArc
+    legend: { data: patNames, bottom: 0, textStyle: { fontSize: 8 }, itemWidth: 10, itemHeight: 10 },
+    tooltip: { trigger: 'axis' },
+    grid: { top: '8%', bottom: '15%', left: '5%', right: '5%' },
+    xAxis: { type: 'category', data: ['一','二','三','四','五','六','七','八','九','十'].slice(0, Math.max(...Object.values(patternMaxLen))), axisLabel: { fontSize: 10, color: '#2e362f' } },
+    yAxis: { type: 'value', min: -1, max: 1 },
+    color: patNames.map(pat => patternColors[pat]),
+    series: patNames.map(pat => ({
+      name: pat, type: 'line', smooth: true, symbol: 'circle', symbolSize: 4,
+      lineStyle: { width: 2.5 },
+      areaStyle: { color: patternColors[pat] + (areaAlphas[pat] || 15).toString(16).padStart(2,'0') },
+      data: Array.from({ length: patternMaxLen[pat] }, (_, j) => {
+        const p = patternArcs[pat][j];
+        return p ? parseFloat((p.sum / p.count).toFixed(3)) : null;
+      })
+    }))
   });
 
   const c2 = getChart('chart-narrative-rhythm');
-  const mainPlayId = selectedPlay==='all'?Object.keys(narrData.plays)[0]:selectedPlay;
-  if (narrData.plays[mainPlayId]) {
-    const pdata = narrData.plays[mainPlayId];
+  const filteredPlays = getFilteredPlays();
+  let rhythmSing = 0, rhythmSpeak = 0, rhythmAction = 0, rhythmFight = 0, rhythmCount = 0;
+  filteredPlays.forEach(p => {
+    const nd = narrData.plays[p.id];
+    if (!nd || !nd.rhythm_profile) return;
+    const rp = nd.rhythm_profile;
+    if (rp.avg_sing + rp.avg_speak + rp.avg_action + rp.avg_fight < 0.01) return;
+    rhythmSing += rp.avg_sing;
+    rhythmSpeak += rp.avg_speak;
+    rhythmAction += rp.avg_action;
+    rhythmFight += rp.avg_fight;
+    rhythmCount++;
+  });
+  if (rhythmCount > 0) {
     c2.setOption({
-      tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-      legend:{data:['唱','念','做','打'],bottom:0,textStyle:{fontSize:11,color:'#5c4e3a'}},
-      xAxis:{type:'category',data:pdata.scenes.map(s=>s.name),axisLabel:{fontSize:9,rotate:20,color:'#5c4e3a'}},
-      yAxis:{type:'value',name:'占比',max:1,nameTextStyle:{color:'#8a7a60'}},
-      series:[
-        {name:'唱',type:'bar',stack:'total',data:pdata.scenes.map(s=>s.sing_ratio),itemStyle:{color:'#c1443a'},emphasis:{focus:'series'}},
-        {name:'念',type:'bar',stack:'total',data:pdata.scenes.map(s=>s.speak_ratio),itemStyle:{color:'#c9a86c'},emphasis:{focus:'series'}},
-        {name:'做',type:'bar',stack:'total',data:pdata.scenes.map(s=>s.action_ratio),itemStyle:{color:'#3a6b8c'},emphasis:{focus:'series'}},
-        {name:'打',type:'bar',stack:'total',data:pdata.scenes.map(s=>s.fight_ratio),itemStyle:{color:'#6b9e6b'},emphasis:{focus:'series'}}
-      ]
+      title: { text: `筛选范围均值（${rhythmCount}部）`, left: 'center', top: 2, textStyle: { fontSize: 10, color: SYSTEM_COLORS.textMuted } },
+      tooltip: { trigger: 'axis' }, legend: { data: ['唱','念','做','打'], bottom: 0 },
+      grid: { top: '12%', bottom: '15%', left: '5%', right: '5%' },
+      xAxis: { type: 'category', data: ['唱','念','做','打'] },
+      yAxis: { type: 'value', max: 1 },
+      series: [{
+        type: 'bar', barMaxWidth: 60,
+        data: [
+          { value: parseFloat((rhythmSing/rhythmCount).toFixed(3)), itemStyle: { color: '#8ba98e', borderRadius: [4,4,0,0] } },
+          { value: parseFloat((rhythmSpeak/rhythmCount).toFixed(3)), itemStyle: { color: '#cba87c', borderRadius: [4,4,0,0] } },
+          { value: parseFloat((rhythmAction/rhythmCount).toFixed(3)), itemStyle: { color: '#7ba38c', borderRadius: [4,4,0,0] } },
+          { value: parseFloat((rhythmFight/rhythmCount).toFixed(3)), itemStyle: { color: '#9587a8', borderRadius: [4,4,0,0] } }
+        ],
+        label: { show: true, position: 'top', formatter: p => (p.value*100).toFixed(1)+'%', fontSize: 10 }
+      }]
     });
   }
 
   const c3 = getChart('chart-narrative-type-rhythm');
   const tr = narrData.type_rhythm_comparison;
   c3.setOption({
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:['唱','念','做','打'],bottom:0,textStyle:{fontSize:11,color:'#5c4e3a'}},
-    xAxis:{type:'category',data:tr.map(t=>t.play_type),axisLabel:{color:'#5c4e3a'}},
-    yAxis:{type:'value',name:'平均占比',max:0.5,nameTextStyle:{color:'#8a7a60'}},
-    series:[
-      {name:'唱',type:'bar',data:tr.map(t=>t.avg_sing),itemStyle:{color:'#c1443a'}},
-      {name:'念',type:'bar',data:tr.map(t=>t.avg_speak),itemStyle:{color:'#c9a86c'}},
-      {name:'做',type:'bar',data:tr.map(t=>t.avg_action),itemStyle:{color:'#3a6b8c'}},
-      {name:'打',type:'bar',data:tr.map(t=>t.avg_fight),itemStyle:{color:'#6b9e6b'}}
+    ...bOpt, tooltip: { trigger: 'axis' },
+    xAxis: { ...bOpt.xAxis, type: 'category', data: tr.map(t => t.play_type) },
+    yAxis: { ...bOpt.yAxis, type: 'value' },
+    series: [
+      { name: '均值唱', type: 'bar', data: tr.map(t => t.avg_sing), itemStyle: { color: '#8ba98e' } },
+      { name: '均值打', type: 'bar', data: tr.map(t => t.avg_fight), itemStyle: { color: '#cba87c', borderRadius: [2,2,0,0] } }
     ]
   });
 
   const c4 = getChart('chart-narrative-patterns');
-  const patterns = narrData.pattern_comparison;
+  const pat = narrData.pattern_comparison;
   c4.setOption({
-    tooltip:{trigger:'axis'},
-    xAxis:{type:'value',name:'情感跨度',max:2,nameTextStyle:{color:'#8a7a60'}},
-    yAxis:{type:'category',data:patterns.map(p=>p.pattern),axisLabel:{fontSize:11,color:'#5c4e3a'}},
-    series:[{ type:'bar',
-      data:patterns.map(p=>({value:p.avg_sentiment_range,
-        itemStyle:{color:p.sentiment_trend==='单调递减'?'#8b1a1f':p.sentiment_trend==='V型反弹'?'#c9a86c':p.sentiment_trend==='波动上升'?'#3a6b8c':'#c96b8a'}
-      })),
-      label:{show:true,position:'right',fontSize:11,color:'#5c4e3a',formatter:p=>patterns[p.dataIndex].sentiment_trend},
-      barMaxWidth:30
-    }]
+    ...bOpt, xAxis: { ...bOpt.xAxis, type: 'value' },
+    yAxis: { ...bOpt.yAxis, type: 'category', data: pat.map(p => p.pattern) },
+    series: [{ type: 'bar', data: pat.map(p => p.avg_sentiment_range), itemStyle: { color: '#7ba38c', borderRadius: [0,4,4,0] } }]
   });
 }
 
-// ==================== PAGE: COMPREHENSIVE ====================
 function renderComprehensive() {
-  const compData = STATE.data.comprehensive;
   const netData = STATE.data.network;
   const themeData = STATE.data.themes;
   const narrData = STATE.data.narrative;
-  if (!compData || !netData || !themeData || !narrData) return;
+  const roleData = STATE.data.roles;
+  if (!netData || !themeData || !narrData || !roleData) return;
 
-  const selectedPlay = STATE.selectedPlay;
-  const playId = selectedPlay === 'all' ? 'play_001' : selectedPlay;
+  const filteredPlays = getFilteredPlays();
+  const filteredPids = new Set(filteredPlays.map(p => p.id));
+  const rangeLabel = filteredPlays.length === getPlays().length ? '全部剧目' : `筛选范围（${filteredPlays.length}部）`;
+  const archColors = ['#7ba38c', '#9587a8', '#cba87c', '#8b9e92'];
+  const archNames = ['生', '旦', '净', '丑'];
+  const tLabels = themeData.theme_labels;
+  const tGroups = themeData.theme_groups || [];
 
+  // 1. 行当互动网络
   const c1 = getChart('chart-comp-network');
-  const pn = netData.plays[playId] || Object.values(netData.plays)[0];
-  if (pn) {
-    const categories = [
-      { name:'生', itemStyle:{color:'#3a6b8c'} }, { name:'旦', itemStyle:{color:'#c1443a'} },
-      { name:'净', itemStyle:{color:'#d4953a'} }, { name:'丑', itemStyle:{color:'#6b9e6b'} }
-    ];
-    const catMap = {'生':0,'旦':1,'净':2,'丑':3};
-    c1.setOption({
-      tooltip:{formatter:p=>p.dataType==='node'?`<b>${p.name}</b><br>行当: ${p.data.archetype}`:''},
-      legend:{data:categories.map(c=>c.name),bottom:0,textStyle:{fontSize:10,color:'#5c4e3a'}},
-      series:[{ type:'graph', layout:'force', roam:true, draggable:true,
-        force:{repulsion:200, edgeLength:60, gravity:0.1}, categories:categories,
-        data:pn.nodes.map(n=>({name:n.name,category:catMap[n.archetype]||0,symbolSize:15+n.importance*20,archetype:n.archetype})),
-        links:pn.edges.map(e=>{const sn=pn.nodes.find(n=>n.id===e.source),tn=pn.nodes.find(n=>n.id===e.target);
-          return {source:sn?.name||e.source,target:tn?.name||e.target,lineStyle:{width:e.weight*0.8}};}),
-        label:{show:true,fontSize:9,color:'#5c4e3a'}
-      }]
+  let totalArchCount = { '生': 0, '旦': 0, '净': 0, '丑': 0 };
+  let totalArchEdges = {};
+  filteredPlays.forEach(p => {
+    const pn = netData.plays[p.id];
+    if (!pn) return;
+    pn.nodes.forEach(n => { if (totalArchCount.hasOwnProperty(n.archetype)) totalArchCount[n.archetype]++; });
+    const nodeArch = {};
+    pn.nodes.forEach(n => { nodeArch[n.id] = n.archetype; });
+    pn.edges.forEach(e => {
+      const sid = typeof e.source === 'object' ? e.source.id : e.source;
+      const tid = typeof e.target === 'object' ? e.target.id : e.target;
+      const sa = nodeArch[sid], ta = nodeArch[tid];
+      if (sa && ta && sa !== ta && archNames.includes(sa) && archNames.includes(ta)) {
+        const key = [sa, ta].sort().join('|');
+        totalArchEdges[key] = (totalArchEdges[key] || 0) + (e.weight || 1);
+      }
     });
-  }
-
-  const c2 = getChart('chart-comp-theme-radar');
-  const pt = themeData.play_theme_matrix.find(p=>p.play_id===playId) || themeData.play_theme_matrix[0];
-  if (pt) {
-    const clusters = themeData.theme_clusters;
-    c2.setOption({
-      tooltip:{}, legend:{data:clusters.map(c=>c.label),bottom:0,textStyle:{fontSize:10,color:'#5c4e3a'}},
-      radar:{center:['50%','50%'],radius:'55%',indicator:clusters.map(c=>({name:c.label,max:0.6}))},
-      series:[{ type:'radar',
-        data:[{ value:clusters.map(c=>{const sum=c.themes.reduce((s,t)=>s+(pt.themes[t]||0),0);return sum/c.themes.length;}),
-          name:pt.play_title, areaStyle:{color:'rgba(193,68,58,0.15)'} }],
-        lineStyle:{color:'#c1443a'}
-      }]
-    });
-  }
-
-  const c3 = getChart('chart-comp-sentiment');
-  const pnarr = narrData.plays[playId] || Object.values(narrData.plays)[0];
-  if (pnarr) {
-    c3.setOption({
-      tooltip:{trigger:'axis'},
-      xAxis:{type:'category',data:pnarr.scenes.map(s=>s.name),axisLabel:{fontSize:8,rotate:30,color:'#5c4e3a'}},
-      yAxis:{type:'value',name:'情感',min:-1,max:1},
-      series:[{ type:'line', data:pnarr.sentiment_arc, smooth:true,
-        areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(193,68,58,0.2)'},{offset:1,color:'rgba(193,68,58,0.01)'}])},
-        lineStyle:{color:'#c1443a',width:2.5}, itemStyle:{color:'#c1443a'} }]
-    });
-  }
-
-  const c4 = getChart('chart-comp-correlation');
-  const tcm = compData.cross_analysis.triple_correlation_matrix;
-  c4.setOption({
-    tooltip:{position:'top'},
-    grid:{left:'15%',top:'5%',bottom:'10%',right:'10%'},
-    xAxis:{type:'category',data:tcm.dimensions.narrative_patterns,axisLabel:{fontSize:9,rotate:25,color:'#5c4e3a'}},
-    yAxis:{type:'category',data:tcm.dimensions.archetypes,axisLabel:{fontSize:11,color:'#5c4e3a'}},
-    visualMap:{min:0,max:1,calculable:true,orient:'horizontal',left:'center',bottom:0,
-      inRange:{color:['#fef9f3','#f5e0c0','#d4953a','#c1443a','#8b1a1f']}},
-    series:[{type:'heatmap',data:tcm.values.flatMap((row,ri)=>row.map((v,ci)=>[ci,ri,v])),label:{show:true,fontSize:12,fontWeight:500}}]
   });
+  const maxCount = Math.max(...Object.values(totalArchCount)) || 1;
+  const edgeEntries = Object.entries(totalArchEdges);
+  const maxEdge = Math.max(...edgeEntries.map(e => e[1])) || 1;
 
-  const c5 = getChart('chart-comp-triple');
-  const nnd = compData.cross_analysis.network_narrative_correlation;
-  c5.setOption({
-    tooltip:{trigger:'item',formatter:p=>`<b>${p.data[3]}</b><br>网络密度: ${p.data[0]}<br>情感跨度: ${p.data[1]}<br>模式: ${p.data[2]}`},
-    xAxis:{type:'value',name:'网络密度',nameTextStyle:{color:'#8a7a60'}},
-    yAxis:{type:'value',name:'情感跨度',nameTextStyle:{color:'#8a7a60'}},
-    series:[{ type:'scatter',
-      data:nnd.map(n=>[n.network_density,n.sentiment_range,n.narrative_pattern,n.play_title]),
-      symbolSize:val=>val[0]*80+15,
-      label:{show:true,formatter:p=>p.data[3],fontSize:11,position:'top',color:'#5c4e3a'},
-      itemStyle:{ shadowBlur:8,shadowColor:'rgba(44,36,22,0.25)',
-        color:new echarts.graphic.RadialGradient(0.4,0.3,1,[{offset:0,color:'#c1443a'},{offset:1,color:'#d4953a'}]) }
+  c1.setOption({
+    title: { text: rangeLabel, left: 'center', top: 0, textStyle: { fontSize: 11, color: SYSTEM_COLORS.textMuted } },
+    tooltip: { formatter: p => {
+      if (p.dataType === 'node') return `<b>${p.name}</b><br>角色总数: ${totalArchCount[p.name] || 0}`;
+      return `${p.data.source} ↔ ${p.data.target}<br>互动权重: ${totalArchEdges[[p.data.source, p.data.target].sort().join('|')] || 0}`;
+    }},
+    series: [{ type: 'graph', layout: 'circular', roam: true,
+      data: archNames.map((a, i) => ({
+        name: a, symbolSize: 20 + (totalArchCount[a] / maxCount) * 25,
+        itemStyle: { color: archColors[i], borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: `{b}\n${totalArchCount[a]}人`, fontSize: 10, color: SYSTEM_COLORS.textDark }
+      })),
+      links: edgeEntries.map(e => {
+        const parts = e[0].split('|');
+        return { source: parts[0], target: parts[1],
+          lineStyle: { width: Math.max(1.5, (e[1] / maxEdge) * 24), opacity: 0.65, curveness: 0.2, color: '#a4bba6' } };
+      }),
+      emphasis: { focus: 'adjacency' }
     }]
   });
+
+  // 2. 主题权重雷达
+  const c2 = getChart('chart-comp-theme-radar');
+  let avgThemes = {}, themeCount = 0;
+  themeData.play_theme_matrix.forEach(m => {
+    if (!filteredPids.has(m.play_id)) return;
+    themeCount++;
+    tLabels.forEach(l => { avgThemes[l] = (avgThemes[l] || 0) + (m.themes ? (m.themes[l] || 0) : 0); });
+  });
+  tLabels.forEach(l => { avgThemes[l] = themeCount > 0 ? (avgThemes[l] || 0) / themeCount : 0; });
+  const radarMax = Math.max(0.05, ...tLabels.map(l => avgThemes[l] || 0)) * 1.3;
+  c2.setOption({
+    title: { text: `${rangeLabel} · 均值`, left: 'center', top: 0, textStyle: { fontSize: 11, color: SYSTEM_COLORS.textMuted } },
+    radar: { indicator: tLabels.map(l => ({ name: l, max: radarMax })), radius: '52%', center: ['50%', '55%'], splitArea: {show: false}, axisName: {color: SYSTEM_COLORS.textDark} },
+    series: [{ type: 'radar',
+      data: [{ value: tLabels.map(l => parseFloat((avgThemes[l] || 0).toFixed(3))), name: '均值',
+        areaStyle: { color: 'rgba(139, 169, 142, 0.2)' }, itemStyle: { color: '#8ba98e' }, lineStyle: { color: '#8ba98e' } }]
+    }]
+  });
+
+  // 3. 叙事情感弧线（筛选范围内所有剧目的平均弧线）
+  const c3 = getChart('chart-comp-rhythm');
+  let arcSums = null, arcCount = 0, maxLen = 0;
+  filteredPlays.forEach(p => {
+    const nd = narrData.plays[p.id];
+    if (nd && nd.sentiment_arc && nd.sentiment_arc.length >= 3) {
+      if (nd.sentiment_arc.length > maxLen) maxLen = nd.sentiment_arc.length;
+    }
+  });
+  if (maxLen >= 3) {
+    arcSums = new Array(maxLen).fill(0);
+    const arcCounts = new Array(maxLen).fill(0);
+    filteredPlays.forEach(p => {
+      const nd = narrData.plays[p.id];
+      if (nd && nd.sentiment_arc && nd.sentiment_arc.length >= 3) {
+        const arc = nd.sentiment_arc;
+        for (let j = 0; j < arc.length; j++) {
+          arcSums[j] += arc[j];
+          arcCounts[j]++;
+        }
+        arcCount++;
+      }
+    });
+    const avgArc = arcSums.map((s,i) => arcCounts[i] > 0 ? parseFloat((s / arcCounts[i]).toFixed(3)) : null).filter(v => v !== null);
+    c3.setOption({
+      title: { text: `${rangeLabel} · 平均弧线（${arcCount}部）`, left: 'center', top: 0, textStyle: { fontSize: 11, color: SYSTEM_COLORS.textMuted } },
+      tooltip: { trigger: 'axis' },
+      xAxis: { type: 'category', data: avgArc.map((v,i) => `第${i+1}场`), axisLabel: { fontSize: 8, color: SYSTEM_COLORS.textDark } },
+      yAxis: { type: 'value', min: -1, max: 1, axisLabel: { fontSize: 8 } },
+      series: [{ type: 'line', data: avgArc, smooth: true,
+        areaStyle: { color: 'rgba(139,169,142,0.2)' }, lineStyle: { color: '#8ba98e', width: 2 }, itemStyle: { color: '#8ba98e' },
+        markLine: { silent: true, symbol: 'none', data: [{ yAxis: 0, lineStyle: { color: '#ccc', type: 'dashed' } }] }
+      }]
+    });
+  } else { c3.clear(); }
+
+  // 4. 行当 → 主题关联矩阵
+  const c4 = getChart('chart-comp-correlation');
+  let archThemeSum = { '生': {}, '旦': {}, '净': {}, '丑': {} };
+  let archThemeCount = { '生': 0, '旦': 0, '净': 0, '丑': 0 };
+  roleData.characters.forEach(ch => {
+    const a = ch.archetype;
+    if (!archThemeSum[a] || !filteredPids.has(ch.play_id)) return;
+    archThemeCount[a]++;
+    const tm = themeData.play_theme_matrix.find(m => m.play_id === ch.play_id);
+    if (tm) { tLabels.forEach(l => { archThemeSum[a][l] = (archThemeSum[a][l] || 0) + (tm.themes ? (tm.themes[l] || 0) : 0); }); }
+  });
+  const heatData = [];
+  archNames.forEach((a, ai) => { tLabels.forEach((l, li) => {
+    const avg = archThemeCount[a] > 0 ? (archThemeSum[a][l] || 0) / archThemeCount[a] : 0;
+    heatData.push([li, ai, parseFloat(avg.toFixed(3))]);
+  });});
+  c4.setOption({
+    title: { text: rangeLabel, left: 'center', top: 0, textStyle: { fontSize: 11, color: SYSTEM_COLORS.textMuted } },
+    tooltip: { position: 'top', formatter: p => `${tLabels[p.data[0]]} / ${archNames[p.data[1]]}<br>均值: ${p.data[2].toFixed(3)}` },
+    grid: { top: '15%', bottom: '15%', left: '10%', right: '5%' },
+    xAxis: { type: 'category', data: tLabels, axisLabel: { fontSize: 9, rotate: 25, color: SYSTEM_COLORS.textDark } },
+    yAxis: { type: 'category', data: archNames, axisLabel: { fontSize: 10, color: SYSTEM_COLORS.textDark } },
+    visualMap: { min: 0, max: 0.3, orient: 'horizontal', left: 'center', bottom: 0, itemWidth: 10, itemHeight: 60, inRange: { color: ['#f2f5f0', '#d2dfd4', '#8ba98e'] } },
+    series: [{ type: 'heatmap', data: heatData, itemStyle: { borderColor: '#fff', borderWidth: 1 } }]
+  });
+
+  // 5. 叙事模式 → 网络结构散点
+  const c5 = getChart('chart-comp-triple');
+  const scatterData = [];
+  const patternColors = { '平稳铺陈型': '#6b8e7a', '波动回环型': '#b8895a', '逆转决断型': '#8b7ea8', '先抑后扬型': '#5c8aa8', '低谷收束型': '#b07070', '先扬后抑型': '#b8974a' };
+  const patternSet = new Set();
+  filteredPlays.forEach(p => {
+    const nd = narrData.plays[p.id];
+    const met = netData.network_metrics ? netData.network_metrics.find(m => m.play_id === p.id) : null;
+    if (!nd || !met) return;
+    const pat = nd.narrative_pattern || '未知';
+    patternSet.add(pat);
+    scatterData.push({
+      value: [met.density || 0, nd.sentiment_range || 0, met.node_count || 10, pat, nd.play_title],
+      itemStyle: { color: patternColors[pat] || '#aaa' }
+    });
+  });
+  c5.setOption({
+    title: { text: rangeLabel, left: 'center', top: 0, textStyle: { fontSize: 11, color: SYSTEM_COLORS.textMuted } },
+    tooltip: { formatter: p => { const d = p.data.value; return `${d[4]}<br>密度: ${d[0].toFixed(2)} 情感跨度: ${d[1].toFixed(2)}<br>模式: ${d[3]}`; } },
+    legend: { data: Array.from(patternSet), bottom: 0, textStyle: { fontSize: 8 }, itemWidth: 10, itemHeight: 10, type: 'scroll' },
+    grid: { top: '8%', bottom: '18%', left: '12%', right: '5%' },
+    xAxis: { type: 'value', name: '网络密度', nameTextStyle: { fontSize: 9, color: SYSTEM_COLORS.textMuted } },
+    yAxis: { type: 'value', name: '情感跨度', nameTextStyle: { fontSize: 9, color: SYSTEM_COLORS.textMuted } },
+    series: [{ type: 'scatter', data: scatterData, symbolSize: d => Math.max(6, Math.sqrt(d[2]) * 2) }]
+  });
+
+  // 6. 主题群 × 叙事模式 交叉热力图
+  const c6 = getChart('chart-comp-theme-narrative');
+  const patternNames = Array.from(patternSet).sort();
+  const groupNames = tGroups.map(g => g.label);
+  const crossCount = {};
+  groupNames.forEach(gn => { crossCount[gn] = {}; patternNames.forEach(pn => { crossCount[gn][pn] = 0; }); });
+  themeData.play_theme_matrix.forEach(m => {
+    if (!filteredPids.has(m.play_id)) return;
+    const nd = narrData.plays[m.play_id];
+    if (!nd) return;
+    const pat = nd.narrative_pattern || '未知';
+    if (!patternNames.includes(pat)) return;
+    const tg = m.theme_groups || {};
+    let bestGroup = null, bestW = -1;
+    Object.keys(tg).forEach(gn => { if (tg[gn] > bestW && groupNames.includes(gn)) { bestW = tg[gn]; bestGroup = gn; } });
+    if (bestGroup) crossCount[bestGroup][pat]++;
+  });
+  const crossData = [];
+  groupNames.forEach((gn, gi) => { patternNames.forEach((pn, pi) => { crossData.push([pi, gi, crossCount[gn][pn] || 0]); }); });
+  const maxCross = Math.max(...crossData.map(d => d[2])) || 1;
+  c6.setOption({
+    title: { text: rangeLabel, left: 'center', top: 0, textStyle: { fontSize: 11, color: SYSTEM_COLORS.textMuted } },
+    tooltip: { position: 'top', formatter: p => `${groupNames[p.data[1]]} × ${patternNames[p.data[0]]}<br>剧目数: ${p.data[2]}` },
+    grid: { top: '15%', bottom: '15%', left: '18%', right: '5%' },
+    xAxis: { type: 'category', data: patternNames, axisLabel: { fontSize: 8, rotate: 25, color: SYSTEM_COLORS.textDark } },
+    yAxis: { type: 'category', data: groupNames, axisLabel: { fontSize: 10, color: SYSTEM_COLORS.textDark } },
+    visualMap: { min: 0, max: maxCross, orient: 'horizontal', left: 'center', bottom: 0, itemWidth: 10, itemHeight: 60, inRange: { color: ['#f2f5f0', '#d2dfd4', '#8ba98e'] } },
+    series: [{ type: 'heatmap', data: crossData, label: { show: true, fontSize: 9, color: SYSTEM_COLORS.textDark }, itemStyle: { borderColor: '#fff', borderWidth: 1 } }]
+  });
+
 }
+
+
 
 // ==================== INIT ====================
 async function init() {
   await loadData();
-  populatePlaySelect();
-  renderPage(STATE.currentPage);
+  populateFilters();
+  updateFilterBadgeAndTags();
+  switchPage('page-overview');
 }
-
 init();
 </script>
 </body>
