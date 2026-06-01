@@ -884,7 +884,12 @@ function populateFilters() {
   plays.forEach(p => { playSel.innerHTML += `<option value="${p.id}">${p.title}</option>`; });
 
   const periodSel = document.getElementById('global-period-select');
-  const periods = [...new Set(plays.map(p => p.period).filter(Boolean))].sort();
+  const chronoOrder = ['神话','尧舜','商','西周','春秋','战国','秦','楚汉','汉','汉末','三国','西晋','晋','北魏','隋','隋末','唐','五代','宋','元','元末','明','清','民国','未知'];
+  const periods = [...new Set(plays.map(p => p.period).filter(Boolean))].sort(function(a, b) {
+    var ai = chronoOrder.indexOf(a), bi = chronoOrder.indexOf(b);
+    if (ai < 0) ai = 999; if (bi < 0) bi = 999;
+    return ai - bi;
+  });
   periodSel.innerHTML = '<option value="all">全部年代</option>';
   periods.forEach(p => { const n = plays.filter(x => x.period === p).length; periodSel.innerHTML += `<option value="${p}">${p}（${n}部）</option>`; });
 
@@ -975,12 +980,18 @@ function renderOverview() {
   const c2 = getChart('chart-overview-periods');
   const periodCount = {};
   plays.forEach(p => { periodCount[p.period] = (periodCount[p.period] || 0) + 1; });
+  var chronoOrderOverview = ['神话','尧舜','商','西周','春秋','战国','秦','楚汉','汉','汉末','三国','西晋','晋','北魏','隋','隋末','唐','五代','宋','元','元末','明','清','民国','未知'];
+  var sortedPeriods = Object.keys(periodCount).sort(function(a, b) {
+    var ai = chronoOrderOverview.indexOf(a), bi = chronoOrderOverview.indexOf(b);
+    if (ai < 0) ai = 999; if (bi < 0) bi = 999;
+    return ai - bi;
+  });
   const baseOpt = createBasicChartOption();
   c2.setOption({
     ...baseOpt, tooltip: { trigger: 'axis' },
-    xAxis: { ...baseOpt.xAxis, type: 'category', data: Object.keys(periodCount) },
+    xAxis: { ...baseOpt.xAxis, type: 'category', data: sortedPeriods },
     yAxis: { ...baseOpt.yAxis, type: 'value' },
-    series: [{ type: 'bar', barMaxWidth: 20, data: Object.values(periodCount), itemStyle: { color: '#8ba98e', borderRadius: [2,2,0,0] } }]
+    series: [{ type: 'bar', barMaxWidth: 20, data: sortedPeriods.map(function(p) { return periodCount[p]; }), itemStyle: { color: '#8ba98e', borderRadius: [2,2,0,0] } }]
   });
   
   //document.getElementById('insight-overview').innerHTML = `本系统已整合解构了 <strong>${plays.length}</strong> 部代表性京剧经典文本剧本。`;
@@ -1009,7 +1020,7 @@ function renderArchetype() {
     periodArchCount[per][arch]++;
   });
   // Chronological sort
-  var chronoOrder = ['上古传说','尧舜','先秦','战国','汉','魏晋','南北朝','隋','唐','五代','宋','元','元末','明','明末','清','清末','民国','1949后','当代','未知'];
+  var chronoOrder = ['神话','尧舜','商','西周','春秋','战国','秦','楚汉','汉','汉末','三国','西晋','晋','北魏','隋','隋末','唐','五代','宋','元','元末','明','清','民国','未知'];
   var allPeriods = Object.keys(periodArchCount).sort(function(a, b) {
     var ai = chronoOrder.indexOf(a), bi = chronoOrder.indexOf(b);
     if (ai < 0) ai = 999; if (bi < 0) bi = 999;
@@ -1206,9 +1217,9 @@ function renderNarrative() {
 
   const patNames = Object.keys(patternArcs).sort();
   c1.setOption({
-    legend: { data: patNames, bottom: 0, textStyle: { fontSize: 8 }, itemWidth: 10, itemHeight: 10 },
+    legend: { data: patNames, top: 4, textStyle: { fontSize: 9 }, itemWidth: 12, itemHeight: 10, itemGap: 8 },
     tooltip: { trigger: 'axis' },
-    grid: { top: '8%', bottom: '15%', left: '5%', right: '5%' },
+    grid: { top: '15%', bottom: '5%', left: '5%', right: '5%' },
     xAxis: { type: 'category', data: ['一','二','三','四','五','六','七','八','九','十'].slice(0, Math.max(...Object.values(patternMaxLen))), axisLabel: { fontSize: 10, color: '#2e362f' } },
     yAxis: { type: 'value', min: -1, max: 1 },
     color: patNames.map(pat => patternColors[pat]),
